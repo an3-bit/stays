@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { MapPin, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   return (
@@ -7,30 +8,30 @@ const Navigation = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="bg-primary text-primary-foreground px-3 py-2 rounded-md font-bold text-lg">
               SAFARI STAYS
             </div>
             <span className="text-white font-medium">KENYA</span>
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-white hover:text-secondary transition-colors font-medium">
+            <Link to="/" className="text-white hover:text-secondary transition-colors font-medium">
               HOME
-            </a>
-            <a href="#" className="text-white hover:text-secondary transition-colors font-medium">
+            </Link>
+            <Link to="/destinations" className="text-white hover:text-secondary transition-colors font-medium">
               DESTINATIONS
-            </a>
-            <a href="#" className="text-white hover:text-secondary transition-colors font-medium">
+            </Link>
+            <Link to="/properties" className="text-white hover:text-secondary transition-colors font-medium">
               PROPERTIES
-            </a>
-            <a href="#" className="text-white hover:text-secondary transition-colors font-medium">
+            </Link>
+            <Link to="/about" className="text-white hover:text-secondary transition-colors font-medium">
               ABOUT
-            </a>
-            <a href="#" className="text-white hover:text-secondary transition-colors font-medium">
+            </Link>
+            <Link to="/contact" className="text-white hover:text-secondary transition-colors font-medium">
               CONTACT
-            </a>
+            </Link>
           </div>
 
           {/* Search Icon */}
