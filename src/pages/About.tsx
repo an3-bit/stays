@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Shield, Award, Users, MapPin, Clock, Star, CheckCircle } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const stats = [
   { label: "Properties Listed", value: "500+", icon: MapPin },
@@ -227,6 +228,7 @@ const About = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

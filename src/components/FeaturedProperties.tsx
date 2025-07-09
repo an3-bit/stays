@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Star, Wifi, Car, Coffee, Users, Bath } from "lucide-react";
+import { MapPin, Star, Users, Bath } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const properties = [
   {
@@ -46,13 +47,14 @@ const properties = [
 ];
 
 const FeaturedProperties = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4">
-            Featured Properties
+            Popular Homes
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Discover our handpicked selection of the finest accommodations across Kenya
@@ -62,7 +64,11 @@ const FeaturedProperties = () => {
         {/* Properties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {properties.map((property) => (
-            <Card key={property.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+            <Card
+              key={property.id}
+              className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer"
+              onClick={() => navigate(`/property/${property.id}`)}
+            >
               {/* Property Image */}
               <div className="relative overflow-hidden">
                 <img 
@@ -135,7 +141,7 @@ const FeaturedProperties = () => {
                       <span className="text-2xl font-bold text-primary">{property.price}</span>
                       <span className="text-muted-foreground">/night</span>
                     </div>
-                    <Button className="bg-primary hover:bg-primary/90">
+                    <Button className="bg-primary hover:bg-primary/90" onClick={e => {e.stopPropagation(); navigate(`/property/${property.id}`);}}>
                       View Details
                     </Button>
                   </div>

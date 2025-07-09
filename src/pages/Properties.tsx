@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Star, Wifi, Car, Coffee, Users, Bath, Heart, Filter, Search } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const properties = [
   {
@@ -322,6 +323,7 @@ const Properties = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

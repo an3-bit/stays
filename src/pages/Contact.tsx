@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, HeadphonesIcon, Users, Building } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const contactMethods = [
   {
@@ -298,6 +299,8 @@ const Contact = () => {
           </div>
         </div>
       </section>
+      {/* Add Footer at the end */}
+      <Footer />
     </div>
   );
 };

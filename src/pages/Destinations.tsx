@@ -6,6 +6,7 @@ import { MapPin, Star, Clock, Users, Camera, Plane } from "lucide-react";
 import maasaiMaraImage from "@/assets/maasai-mara.jpg";
 import dianiBeachImage from "@/assets/diani-beach.jpg";
 import mountKenyaImage from "@/assets/mount-kenya.jpg";
+import Footer from "@/components/Footer";
 
 const destinations = [
   {
@@ -183,6 +184,7 @@ const Destinations = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
