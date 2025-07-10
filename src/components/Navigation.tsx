@@ -8,7 +8,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <div className="bg-primary text-white px-4 py-2 rounded font-extrabold text-xl tracking-wider uppercase leading-none shadow">
+          <div className="bg-secondary text-secondary-foreground px-4 py-2 rounded font-extrabold text-xl tracking-wider uppercase leading-none shadow">
             Safari Stays
           </div>
           <span className="text-xs text-primary font-light ml-2 tracking-widest">Airbnbs in Kenya</span>

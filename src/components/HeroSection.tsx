@@ -117,7 +117,7 @@ const HeroSection = () => {
                         <option key={c} value={c} className="text-black bg-white">{c}</option>
                       ))}
                     </select>
-                    <Button type="submit" className="h-12 px-8 bg-white text-primary font-bold text-base tracking-wider shadow-none border-l-2 border-white rounded-none rounded-r-md">Find Your Perfect Stay</Button>
+                    <Button type="submit" className="h-12 px-8 bg-secondary text-secondary-foreground font-bold text-base tracking-wider shadow-none border-l-2 border-white rounded-none rounded-r-md hover:bg-secondary/90">Find Your Perfect Stay</Button>
                   </div>
                 </div>
               </div>
