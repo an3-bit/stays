@@ -22,7 +22,7 @@ const Navigation = () => {
             Experiences
           </Link>
           <Link to="/about" className="relative py-3 px-4 text-muted-foreground hover:text-secondary transition-colors font-medium border-b-2 border-transparent hover:border-secondary">
-            About
+            Services
           </Link>
         </div>
 
