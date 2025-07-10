@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star, Users, Bath } from "lucide-react";
 import Footer from "@/components/Footer";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 const properties = [
   {
@@ -51,6 +56,22 @@ const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const property = properties.find((p) => p.id === Number(id));
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    checkIn: "",
+    checkOut: "",
+    guests: "",
+    message: ""
+  });
+
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsBookingOpen(false);
+    navigate("/booking-confirmation");
+  };
 
   if (!property) {
     return (
@@ -120,9 +141,98 @@ const PropertyDetails = () => {
                   ))}
                 </div>
               </div>
-              <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-lg font-semibold">
-                Book Now
-              </Button>
+              <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
+                <DialogTrigger asChild>
+                  <Button className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold">
+                    Book Now
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle className="text-primary">Book {property.name}</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleBookingSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="guests">Guests</Label>
+                        <Input
+                          id="guests"
+                          type="number"
+                          min="1"
+                          value={formData.guests}
+                          onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="checkIn">Check In</Label>
+                        <Input
+                          id="checkIn"
+                          type="date"
+                          value={formData.checkIn}
+                          onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="checkOut">Check Out</Label>
+                        <Input
+                          id="checkOut"
+                          type="date"
+                          value={formData.checkOut}
+                          onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="message">Special Requests (Optional)</Label>
+                      <Textarea
+                        id="message"
+                        placeholder="Any special requirements or requests..."
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      />
+                    </div>
+                    <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+                      Confirm Booking
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </div>
         </Card>

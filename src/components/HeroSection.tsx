@@ -96,7 +96,9 @@ const HeroSection = () => {
         <div className="flex flex-col items-center justify-center p-1 sm:p-3 md:p-4 border-4 border-white bg-white/0 rounded-lg max-w-xl w-full">
           {/* Inner content box with thick border */}
           <div className="w-full flex flex-col items-center justify-center border-4 border-white bg-white/10 rounded-lg px-6 py-10 md:py-14 shadow-xl">
-            <div className="mb-2 text-primary tracking-widest text-sm uppercase text-center">Welcome to Safari Stays Airbnbs</div>
+            <div className="mb-2 text-white tracking-widest text-sm uppercase text-center italic font-semibold">
+              Welcome to Safari Stays Airbnbs
+            </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 tracking-wide text-center drop-shadow-lg">Find Your Perfect Stay</h1>
             <div className="h-1 w-16 bg-white/70 my-4 mx-auto" />
             <div className="text-lg text-white/90 mb-8 text-center font-light drop-shadow">The easiest way to find property and unique stays across Kenya.</div>

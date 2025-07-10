@@ -7,7 +7,7 @@ import React from "react";
 // Refined property data with Pexels images and more properties per section
 const propertyGroups = [
   {
-    title: "Popular homes in Nairobi",
+    title: "Popular Stays in Nairobi",
     properties: [
       {
         id: 1,
@@ -115,6 +115,45 @@ const propertyGroups = [
   // Add more groups for Nakuru, Kwale, Kilifi, Machakos, Laikipia, Kisumu, Kajiado, etc. with at least 6 properties each and relevant Pexels images
 ];
 
+const inspirations = [
+  {
+    id: 1,
+    title: "Beachfront Escapes",
+    image: "https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800",
+    description: "Relax in stunning beachfront homes along Kenya's coast, from Diani to Watamu.",
+  },
+  {
+    id: 2,
+    title: "Safari Lodges",
+    image: "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800",
+    description: "Experience the wild in luxury lodges near Maasai Mara, Amboseli, and Tsavo.",
+  },
+  {
+    id: 3,
+    title: "Urban Chic Apartments",
+    image: "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800",
+    description: "Stay in stylish city apartments in Nairobi, Mombasa, and Kisumu.",
+  },
+  {
+    id: 4,
+    title: "Mountain Retreats",
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800",
+    description: "Unwind in serene cabins and villas with breathtaking views of Mt. Kenya and Aberdares.",
+  },
+  {
+    id: 5,
+    title: "Family Villas",
+    image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&w=800",
+    description: "Spacious homes perfect for family getaways and group adventures.",
+  },
+  {
+    id: 6,
+    title: "Romantic Hideaways",
+    image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800",
+    description: "Cozy, private stays for couples seeking a romantic escape.",
+  },
+];
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -127,11 +166,20 @@ const Index = () => {
         {/* Inspiration for future getaways section */}
         <section className="mt-16 mb-8">
           <h3 className="text-lg font-bold mb-4 text-foreground">Inspiration for future getaways</h3>
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <span>Unique stays</span>
-            <span>Categories</span>
-            <span>Travel tips & inspiration</span>
-            <span>Airbnb-friendly apartments</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {inspirations.map((insp) => (
+              <div
+                key={insp.id}
+                className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-shadow cursor-pointer group"
+                onClick={() => window.location.href = `/inspiration/${insp.id}`}
+              >
+                <img src={insp.image} alt={insp.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div className="p-5">
+                  <h4 className="text-xl font-semibold mb-2 text-foreground">{insp.title}</h4>
+                  <p className="text-muted-foreground text-sm">{insp.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       </main>
