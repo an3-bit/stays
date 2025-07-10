@@ -17,12 +17,12 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
 
-    /* Safari Green - Primary brand color */
-    --primary: 123 41% 49%;
+    /* Olive Green - Primary brand color */
+    --primary: 78 45% 35%;
     --primary-foreground: 0 0% 98%;
 
-    /* Warm Ochre - Secondary brand color */
-    --secondary: 30 69% 58%;
+    /* Orange - Secondary brand color */
+    --secondary: 25 85% 55%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 96%;
