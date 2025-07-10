@@ -101,7 +101,7 @@ const HeroSection = () => {
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 tracking-wide text-center drop-shadow-lg">Find Your Perfect Stay</h1>
             <div className="h-1 w-16 bg-white/70 my-4 mx-auto" />
-            <div className="text-lg text-white/90 mb-8 text-center font-light drop-shadow">The easiest way to find property and unique stays across Kenya.</div>
+            <div className="text-lg text-white/90 mb-8 text-center font-light drop-shadow">The easiest way to find Airbnbs and unique stays across Kenya.</div>
             <form className="flex flex-col items-center w-full max-w-md mx-auto gap-6" onSubmit={handleSubmit}>
               {/* Location Detection/Selection */}
               <div className="flex flex-col w-full">
