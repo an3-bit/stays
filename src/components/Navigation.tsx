@@ -5,10 +5,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Search, Menu, Globe, User, Home, Star, Settings, Calendar, Users, MapPin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Navigation = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [showCompactNav, setShowCompactNav] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [formData, setFormData] = useState({
     destination: "",
     checkIn: "",
@@ -21,6 +23,31 @@ const Navigation = () => {
   });
   const navigate = useNavigate();
 
+  // Scroll detection for compact nav
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 200) {
+        if (currentScrollY < lastScrollY) {
+          // Scrolling up
+          setShowCompactNav(true);
+        } else {
+          // Scrolling down
+          setShowCompactNav(false);
+        }
+      } else {
+        // At top
+        setShowCompactNav(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsBookingOpen(false);
@@ -28,6 +55,115 @@ const Navigation = () => {
   };
 
   return (
+    <>
+      {/* Compact Navigation - appears on scroll up */}
+      <div className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg border-b transition-transform duration-300 ${
+        showCompactNav ? 'translate-y-0' : '-translate-y-full'
+      }`}>
+        <div className="container mx-auto px-6 py-3">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <div className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md font-bold text-sm tracking-wide">
+                Safari Stays
+              </div>
+            </Link>
+
+            {/* Compact Search */}
+            <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
+              <DialogTrigger asChild>
+                <div className="flex items-center bg-white border border-border rounded-full shadow-md hover:shadow-lg transition-shadow cursor-pointer max-w-md">
+                  <div className="px-4 py-2 border-r border-border">
+                    <span className="text-sm font-medium text-foreground">
+                      {formData.destination || "Anywhere"}
+                    </span>
+                  </div>
+                  <div className="px-4 py-2 border-r border-border">
+                    <span className="text-sm font-medium text-foreground">
+                      {formData.checkIn || "Anytime"}
+                    </span>
+                  </div>
+                  <div className="px-4 py-2">
+                    <span className="text-sm text-muted-foreground">
+                      {formData.guests || "Add guests"}
+                    </span>
+                  </div>
+                  <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-full h-8 w-8 mr-1 flex items-center justify-center">
+                    <Search className="h-3 w-3" />
+                  </Button>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle className="text-primary">Complete Your Booking</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleBookingSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="name">Full Name</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="message">Special Requests (Optional)</Label>
+                    <Textarea
+                      id="message"
+                      placeholder="Any special requirements or requests..."
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+                    Submit Booking Request
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            {/* Right Side */}
+            <div className="flex items-center space-x-2">
+              <Link to="/contact" className="hidden md:block text-xs font-medium text-foreground hover:text-secondary transition-colors">
+                Become a host
+              </Link>
+              <div className="flex items-center space-x-2 border border-border rounded-full py-1 px-2">
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <Menu className="h-3 w-3" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-6 w-6 bg-muted">
+                  <User className="h-3 w-3" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
     <div className="w-full bg-white shadow-sm border-b sticky top-0 z-50">
       {/* Main Navigation */}
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
@@ -189,6 +325,7 @@ const Navigation = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
