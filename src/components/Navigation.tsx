@@ -122,7 +122,7 @@ const Navigation = () => {
           <div className="flex items-center space-x-3 border border-border rounded-full py-1.5 px-2 shadow-sm hover:shadow-md transition-shadow bg-white/80">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="ghost" size="icon" className="h-8 w-8 lg:hidden">
                   <Menu className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
