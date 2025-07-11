@@ -106,11 +106,11 @@ const HeroSection = () => {
               {/* Location Detection/Selection */}
               <div className="flex flex-col w-full">
                 <label className="text-xs text-white/80 mb-1 font-medium text-center">Choose your city or let us detect your location</label>
-                <div className="flex w-full items-center justify-center">
-                  <div className="flex w-full border-2 border-white rounded-md overflow-hidden bg-white/20">
+                <div className="flex flex-col sm:flex-row w-full items-center justify-center gap-2 sm:gap-0">
+                  <div className="flex flex-col sm:flex-row w-full border-2 border-white rounded-md overflow-hidden bg-white/20">
                     <select
                       ref={selectRef}
-                      className="w-full bg-transparent text-white placeholder-white/80 border-none focus:ring-0 focus:border-none h-12 px-4 text-base appearance-none"
+                      className="w-full bg-transparent text-white placeholder-white/80 border-none focus:ring-0 focus:border-none h-12 px-4 text-sm sm:text-base appearance-none"
                       value={city}
                       onChange={e => setCity(e.target.value)}
                     >
@@ -119,7 +119,10 @@ const HeroSection = () => {
                         <option key={c} value={c} className="text-black bg-white">{c}</option>
                       ))}
                     </select>
-                    <Button type="submit" className="h-12 px-8 bg-secondary text-secondary-foreground font-bold text-base tracking-wider shadow-none border-l-2 border-white rounded-none rounded-r-md hover:bg-secondary/90">Find Your Perfect Stay</Button>
+                    <Button type="submit" className="h-12 px-4 sm:px-8 bg-secondary text-secondary-foreground font-bold text-sm sm:text-base tracking-wider shadow-none border-l-0 sm:border-l-2 border-t-2 sm:border-t-0 border-white rounded-none sm:rounded-r-md hover:bg-secondary/90 w-full sm:w-auto">
+                      <span className="hidden sm:inline">Find Your Perfect Stay</span>
+                      <span className="sm:hidden">Search</span>
+                    </Button>
                   </div>
                 </div>
               </div>
