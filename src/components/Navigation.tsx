@@ -21,32 +21,9 @@ const Navigation = () => {
     phone: "",
     message: ""
   });
-  const [showCompactSearch, setShowCompactSearch] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [atTop, setAtTop] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/";
-
-  useEffect(() => {
-    if (isHome) return;
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setAtTop(currentScrollY < 40);
-      if (currentScrollY > 120) {
-        if (currentScrollY > lastScrollY) {
-          setShowCompactSearch(true);
-        } else if (currentScrollY < lastScrollY) {
-          setShowCompactSearch(false);
-        }
-      } else {
-        setShowCompactSearch(false);
-      }
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, isHome]);
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -196,7 +173,7 @@ const Navigation = () => {
         </div>
       </nav>
       {/* Search Bar */}
-      {!isHome && !showCompactSearch && (
+      {!isHome && (
         <div className="border-t border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300">
           <div className="container mx-auto px-6 py-4">
             <div className="flex items-center justify-center">
@@ -276,19 +253,6 @@ const Navigation = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {/* Floating Compact Search Button */}
-      {!isHome && showCompactSearch && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white rounded-full h-16 w-16 flex items-center justify-center shadow-xl">
-                <Search className="h-7 w-7" />
-              </Button>
-            </DialogTrigger>
-            {BookingDialog}
-          </Dialog>
         </div>
       )}
     </div>
