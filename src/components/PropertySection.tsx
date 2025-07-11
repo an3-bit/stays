@@ -13,11 +13,11 @@ const PropertySection = ({ title, properties }) => {
           {title} <span className="ml-1 text-primary">›</span>
         </h2>
       </div>
-      <div className="flex gap-4 overflow-x-auto pb-2 hide-scrollbar">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:flex md:gap-4 md:overflow-x-auto pb-2 hide-scrollbar">
         {properties.map((property) => (
           <div
             key={property.id}
-            className="min-w-[260px] max-w-[260px] flex-shrink-0 cursor-pointer group"
+            className="w-full md:min-w-[260px] md:max-w-[260px] md:flex-shrink-0 cursor-pointer group"
             onClick={() => navigate(`/property/${property.id}`)}
           >
             <Card className="overflow-hidden group hover:shadow-lg transition-shadow duration-200">
