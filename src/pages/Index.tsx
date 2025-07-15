@@ -1,8 +1,11 @@
+import React, { useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PropertySection from "@/components/PropertySection";
 import HeroSection from "@/components/HeroSection";
-import React from "react";
+// @ts-expect-error: no types for aos
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Refined property data with Pexels images and more properties per section
 const propertyGroups = [
@@ -155,6 +158,9 @@ const inspirations = [
 ];
 
 const Index = () => {
+  useEffect(() => {
+    AOS.init({ duration: 900, once: true });
+  }, []);
   return (
     <>
       <div className="relative min-h-[70vh] bg-cover bg-center" style={{ backgroundImage: `url('/src/assets/bg.jpg')` }}>
@@ -166,7 +172,7 @@ const Index = () => {
       </div>
 
       {/* Peace of Mind Section */}
-      <section className="w-full bg-white py-16">
+      <section className="w-full bg-white py-16" data-aos="fade-up">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
           {/* Left: Heading and horizontal property cards */}
           <div>
@@ -220,7 +226,7 @@ const Index = () => {
                   <div className="text-gray-600 text-base">Efficient and empowered home experts, whose sole task is to make your stay exceptional.</div>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-4"> 
                 <div className="text-5xl font-bold text-orange-300 leading-none">3</div>
                 <div>
                   <div className="font-bold text-lg mb-1">Total Reassurance</div>
@@ -239,18 +245,43 @@ const Index = () => {
       </section>
 
       {/* Ratings/Testimonial Section */}
-      <section className="w-full bg-orange-400 py-10 flex flex-col items-center text-center">
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Rated "EXCELLENT" for a reason.</h2>
-        <p className="text-white/90 max-w-2xl mx-auto mb-4">We don't just list homes—we scrutinise them, rejecting thousands that don't meet our standards. When you book with us, you're guaranteed the best.</p>
-        <div className="flex flex-wrap justify-center gap-4 mt-4">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8" />
-          <span className="bg-white text-orange-500 font-bold px-4 py-2 rounded-full shadow">Traveller's Choice 2024</span>
-          <span className="bg-white text-orange-500 font-bold px-4 py-2 rounded-full shadow">Traveller's Choice 2023</span>
+      <section className="w-full bg-orange-400 py-14 flex flex-col items-center text-center" data-aos="fade-up">
+        <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">Rated "EXCELLENT" for a reason.</h2>
+        <p className="text-lg text-black max-w-2xl mx-auto mb-8">
+          <span className="font-semibold">We don’t just list homes—we <span className='underline underline-offset-4'>scrutinise them</span></span>, rejecting thousands that don’t meet our standards. When you book with Safari Airbnbs, you’re guaranteed the best.
+        </p>
+        <div className="flex flex-wrap justify-center gap-8 items-center mt-4">
+          {/* Trustpilot badge */}
+          <div className="flex flex-col items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8 mb-2" />
+            <div className="flex items-center mb-1">
+              {/* Real star icons */}
+              {Array.from({ length: 5 }).map((_, i) => (
+                <svg key={i} className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36" /></svg>
+              ))}
+            </div>
+            <div className="text-black text-sm">TrustScore <b>4.6</b> | 3,818 reviews</div>
+          </div>
+          {/* Skift badge */}
+          <img src="https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&w=120&h=120&fit=crop" alt="Skift Winner" className="h-20 w-20 rounded-full border-4 border-green-400 object-cover" />
+          {/* Traveller Awards badges */}
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <div className="bg-black text-white rounded-full w-28 h-28 flex flex-col items-center justify-center px-2 text-center">
+                <span className="text-xs mt-1">TRAVELLERS' CHOICE AWARDS 2023</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-black text-white rounded-full w-28 h-28 flex flex-col items-center justify-center px-2 text-center">
+                <span className="text-xs mt-1">TRAVELLERS' CHOICE AWARDS 2024</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Featured In Logos */}
-      <section className="w-full bg-white py-6 border-b flex flex-col items-center">
+      <section className="w-full bg-white py-6 border-b flex flex-col items-center" data-aos="fade-up">
         <div className="flex flex-wrap justify-center gap-8 items-center opacity-70">
           <span className="text-lg font-semibold">As featured in</span>
           <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nytimes_hq.png" alt="NYT" className="h-6" />
@@ -262,7 +293,7 @@ const Index = () => {
       </section>
 
       {/* Book Your Dream Stay Section */}
-      <section className="w-full bg-gray-50 py-16">
+      <section className="w-full bg-gray-50 py-16" data-aos="fade-up">
         <div className="max-w-6xl mx-auto px-4">
           <h3 className="text-2xl font-bold mb-8 text-orange-500">Book your dream stay today</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
