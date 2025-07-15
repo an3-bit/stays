@@ -156,35 +156,163 @@ const inspirations = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <HeroSection />
-      <main className="container mx-auto px-4 pt-8 pb-16">
-        {propertyGroups.map((group, idx) => (
-          <PropertySection key={idx} title={group.title} properties={group.properties} />
-        ))}
-        {/* Inspiration for future getaways section */}
-        <section className="mt-16 mb-8">
-          <h3 className="text-lg font-bold mb-4 text-foreground">Inspiration for future getaways</h3>
+    <>
+      <div className="relative min-h-[70vh] bg-cover bg-center" style={{ backgroundImage: `url('/src/assets/bg.jpg')` }}>
+        <div className="absolute inset-0 bg-black/30 z-0" />
+        <div className="relative z-10">
+          <Navigation />
+          <HeroSection />
+        </div>
+      </div>
+
+      {/* Peace of Mind Section */}
+      <section className="w-full bg-white py-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
+          {/* Left: Heading and horizontal property cards */}
+          <div>
+            <h3 className="text-3xl font-bold mb-2 text-gray-900">Peace of mind guaranteed with every booking</h3>
+            <p className="mb-8 text-gray-600 text-lg">We promise expert-vetted homes, total transparency and exceptional service.</p>
+            <div className="flex space-x-6 overflow-x-auto pb-2">
+              {[
+                {
+                  image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=600',
+                  location: 'DIÀ',
+                  name: 'Peach Sunlight, Majorca',
+                },
+                {
+                  image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=600',
+                  location: 'GREAT YARMOUTH',
+                  name: 'The Norfolk Beacon, Norfolk',
+                },
+                {
+                  image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=600',
+                  location: 'VILA DE GRÀCIA',
+                  name: 'The Epicurean Spirit, Gràcia',
+                },
+                {
+                  image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=600',
+                  location: 'LONDON',
+                  name: 'The New Vibes, England',
+                },
+              ].map((card, i) => (
+                <div key={i} className="min-w-[220px] flex-shrink-0">
+                  <img src={card.image} alt={card.name} className="rounded-xl w-full h-40 object-cover mb-2" />
+                  <div className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1">{card.location}</div>
+                  <div className="text-base font-medium text-gray-900 leading-tight">{card.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Right: Numbered features and image */}
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="flex-1 flex flex-col gap-8">
+              <div className="flex items-start gap-4">
+                <div className="text-5xl font-bold text-orange-300 leading-none">1</div>
+                <div>
+                  <div className="font-bold text-lg mb-1">Expert-Vetted Homes</div>
+                  <div className="text-gray-600 text-base">Our experts have meticulously vetted every available rental, filtering out the thousands that don’t meet our standards - saving you from disappointment.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="text-5xl font-bold text-orange-300 leading-none">2</div>
+                <div>
+                  <div className="font-bold text-lg mb-1">In-house Care</div>
+                  <div className="text-gray-600 text-base">Efficient and empowered home experts, whose sole task is to make your stay exceptional.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="text-5xl font-bold text-orange-300 leading-none">3</div>
+                <div>
+                  <div className="font-bold text-lg mb-1">Total Reassurance</div>
+                  <div className="text-gray-600 text-base">If you get stranded, we’ll help you find a new stay immidiately. Within 5 days of check-in, it’s up to 50% cheaper.</div>
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 flex justify-center items-center mt-8 lg:mt-0">
+              <div className="relative w-72 h-80">
+                <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=600" alt="The Plum Promise" className="rounded-xl w-full h-full object-cover" />
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-300 text-gray-900 font-bold px-6 py-3 rounded-full shadow-lg text-lg border-4 border-white">The Safari Airbnbs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ratings/Testimonial Section */}
+      <section className="w-full bg-orange-400 py-10 flex flex-col items-center text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Rated "EXCELLENT" for a reason.</h2>
+        <p className="text-white/90 max-w-2xl mx-auto mb-4">We don't just list homes—we scrutinise them, rejecting thousands that don't meet our standards. When you book with us, you're guaranteed the best.</p>
+        <div className="flex flex-wrap justify-center gap-4 mt-4">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8" />
+          <span className="bg-white text-orange-500 font-bold px-4 py-2 rounded-full shadow">Traveller's Choice 2024</span>
+          <span className="bg-white text-orange-500 font-bold px-4 py-2 rounded-full shadow">Traveller's Choice 2023</span>
+        </div>
+      </section>
+
+      {/* Featured In Logos */}
+      <section className="w-full bg-white py-6 border-b flex flex-col items-center">
+        <div className="flex flex-wrap justify-center gap-8 items-center opacity-70">
+          <span className="text-lg font-semibold">As featured in</span>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nytimes_hq.png" alt="NYT" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Forbes_logo.svg" alt="Forbes" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo-Architectural-Digest.png" alt="AD" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Harper%27s_Bazaar_logo.svg" alt="Bazaar" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Travel_%2B_Leisure_logo.svg" alt="Travel+Leisure" className="h-6" />
+        </div>
+      </section>
+
+      {/* Book Your Dream Stay Section */}
+      <section className="w-full bg-gray-50 py-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <h3 className="text-2xl font-bold mb-8 text-orange-500">Book your dream stay today</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {inspirations.map((insp) => (
-              <div
-                key={insp.id}
-                className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-shadow cursor-pointer group"
-                onClick={() => window.location.href = `/inspiration/${insp.id}`}
-              >
-                <img src={insp.image} alt={insp.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+            {[
+              {
+                title: 'Diani Beach Villa',
+                image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800',
+                desc: 'A stunning beachfront villa in Diani, Kenya.'
+              },
+              {
+                title: 'Maasai Mara Safari Lodge',
+                image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800',
+                desc: 'Experience the wild in luxury at Maasai Mara.'
+              },
+              {
+                title: 'Nairobi City Apartment',
+                image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800',
+                desc: 'Modern comfort in the heart of Nairobi.'
+              },
+              {
+                title: 'Mount Kenya Retreat',
+                image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800',
+                desc: 'A peaceful escape with breathtaking mountain views.'
+              },
+              {
+                title: 'Watamu Beach House',
+                image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800',
+                desc: 'Relax in a beautiful home on Watamu’s white sands.'
+              },
+              {
+                title: 'Lamu Island Hideaway',
+                image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800',
+                desc: 'Traditional Swahili charm on Lamu Island.'
+              },
+            ].map((stay, i) => (
+              <div key={i} className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-shadow cursor-pointer group">
+                <img src={stay.image} alt={stay.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="p-5">
-                  <h4 className="text-xl font-semibold mb-2 text-foreground">{insp.title}</h4>
-                  <p className="text-muted-foreground text-sm">{insp.description}</p>
+                  <h4 className="text-xl font-semibold mb-2 text-foreground">{stay.title}</h4>
+                  <p className="text-muted-foreground text-sm">{stay.desc}</p>
+                  <button className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-full font-semibold hover:bg-orange-600 transition-colors">View Details</button>
                 </div>
               </div>
             ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
+
       <Footer />
-    </div>
+    </>
   );
 };
 

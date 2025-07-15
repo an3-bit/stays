@@ -88,26 +88,26 @@ const Navigation = () => {
   );
 
   return (
-    <div className="w-full bg-white/90 shadow-md border-b sticky top-0 z-50 backdrop-blur-md transition-all duration-300">
+    <div className={`w-full sticky top-0 z-50 transition-all duration-300 ${isHome ? "bg-transparent border-none shadow-none backdrop-blur-none" : "bg-white/90 shadow-md border-b backdrop-blur-md"}`}>
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center group">
-          <div className="bg-secondary text-secondary-foreground px-3 py-1.5 rounded-lg font-bold text-lg tracking-wide shadow group-hover:scale-105 transition-transform">
+          <div className={`${isHome ? "bg-transparent text-orange-300" : "bg-secondary text-secondary-foreground"} px-3 py-1.5 rounded-lg font-bold text-lg tracking-wide shadow group-hover:scale-105 transition-transform`}>
             Safari Stays
           </div>
         </Link>
         {/* Center Navigation */}
         <div className="hidden lg:flex items-center space-x-8">
-          <Link to="/properties" className="relative py-3 px-4 text-foreground hover:text-secondary transition-colors font-medium border-b-2 border-transparent hover:border-secondary flex items-center gap-2 rounded-md hover:bg-secondary/10">
-            <Home className="h-4 w-4" />
+          <Link to="/properties" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-foreground hover:text-secondary'}`}>
+            <Home className={`h-4 w-4 ${isHome ? 'text-white' : ''}`} />
             Stays
           </Link>
-          <Link to="/destinations" className="relative py-3 px-4 text-muted-foreground hover:text-secondary transition-colors font-medium border-b-2 border-transparent hover:border-secondary flex items-center gap-2 rounded-md hover:bg-secondary/10">
-            <Star className="h-4 w-4" />
+          <Link to="/destinations" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-muted-foreground hover:text-secondary'}`}>
+            <Star className={`h-4 w-4 ${isHome ? 'text-white' : ''}`} />
             Experiences
           </Link>
-          <Link to="/about" className="relative py-3 px-4 text-muted-foreground hover:text-secondary transition-colors font-medium border-b-2 border-transparent hover:border-secondary flex items-center gap-2 rounded-md hover:bg-secondary/10">
-            <Settings className="h-4 w-4" />
+          <Link to="/about" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-muted-foreground hover:text-secondary'}`}>
+            <Settings className={`h-4 w-4 ${isHome ? 'text-white' : ''}`} />
             Services
           </Link>
         </div>
@@ -119,7 +119,7 @@ const Navigation = () => {
           <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted">
             <Globe className="h-4 w-4" />
           </Button>
-          <div className="flex items-center space-x-3 border border-border rounded-full py-1.5 px-2 shadow-sm hover:shadow-md transition-shadow bg-white/80">
+          <div className="flex items-center space-x-3 py-1.5 px-2">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8 lg:hidden">
