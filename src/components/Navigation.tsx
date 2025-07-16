@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Search, Menu, Globe, User, Home, Star, Settings, X } from "lucide-react";
+import { Search, Menu, Globe, User, Home, Star, Settings, X, Minus, Plus } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -98,13 +98,13 @@ const Navigation = () => {
         </Link>
         {/* Center Navigation */}
         <div className="hidden lg:flex items-center space-x-8">
-          <Link to="/properties" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-foreground hover:text-secondary'}`}>
+          <Link to="/" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-foreground hover:text-secondary'}`}>
             <Home className={`h-4 w-4 ${isHome ? 'text-white' : ''}`} />
             Stays
           </Link>
-          <Link to="/destinations" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-muted-foreground hover:text-secondary'}`}>
+          <Link to="/properties" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-muted-foreground hover:text-secondary'}`}>
             <Star className={`h-4 w-4 ${isHome ? 'text-white' : ''}`} />
-            Experiences
+            Properties
           </Link>
           <Link to="/about" className={`relative py-3 px-4 font-medium border-b-2 border-transparent flex items-center gap-2 rounded-md transition-colors hover:border-secondary hover:bg-secondary/10 ${isHome ? 'text-white hover:text-white' : 'text-muted-foreground hover:text-secondary'}`}>
             <Settings className={`h-4 w-4 ${isHome ? 'text-white' : ''}`} />
@@ -132,7 +132,7 @@ const Navigation = () => {
                 </SheetHeader>
                 <nav className="flex flex-col space-y-4 mt-6">
                   <Link 
-                    to="/properties" 
+                    to="/" 
                     className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -140,12 +140,12 @@ const Navigation = () => {
                     <span className="font-medium">Stays</span>
                   </Link>
                   <Link 
-                    to="/destinations" 
+                    to="/properties" 
                     className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Star className="h-5 w-5" />
-                    <span className="font-medium">Experiences</span>
+                    <span className="font-medium">Properties</span>
                   </Link>
                   <Link 
                     to="/about" 
@@ -201,43 +201,42 @@ const Navigation = () => {
                   {/* Destination */}
                   <div className="flex-1 px-6 py-4 border-r border-border">
                     <label className="block text-xs font-medium text-muted-foreground mb-1">Where</label>
-                    <input
+                    <Input
                       type="text"
-                      placeholder="Search destinations"
-                      className="w-full bg-transparent border-none focus:outline-none text-sm placeholder:text-muted-foreground"
+                      placeholder="Add destination"
                       value={formData.destination}
                       onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                      className="w-full"
                     />
                   </div>
-                  {/* Check In */}
+                  {/* Check In & Check Out as Date Range Dropdown */}
                   <div className="flex-1 px-6 py-4 border-r border-border">
-                    <label className="block text-xs font-medium text-muted-foreground mb-1">Check in</label>
-                    <input
-                      type="date"
-                      className="w-full bg-transparent border-none focus:outline-none text-sm"
-                      value={formData.checkIn}
-                      onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
-                    />
-                  </div>
-                  {/* Check Out */}
-                  <div className="flex-1 px-6 py-4 border-r border-border">
-                    <label className="block text-xs font-medium text-muted-foreground mb-1">Check out</label>
-                    <input
-                      type="date"
-                      className="w-full bg-transparent border-none focus:outline-none text-sm"
-                      value={formData.checkOut}
-                      onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
-                    />
+                    <label className="block text-xs font-medium text-muted-foreground mb-1">Dates</label>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        type="date"
+                        value={formData.checkIn}
+                        onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
+                        className="w-full"
+                      />
+                      <span className="text-muted-foreground">to</span>
+                      <Input
+                        type="date"
+                        value={formData.checkOut}
+                        onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
+                        className="w-full"
+                      />
+                    </div>
                   </div>
                   {/* Who */}
                   <div className="flex-1 px-6 py-4">
                     <label className="block text-xs font-medium text-muted-foreground mb-1">Who</label>
-                    <input
+                    <Input
                       type="text"
                       placeholder="Add guests"
-                      className="w-full bg-transparent border-none focus:outline-none text-sm placeholder:text-muted-foreground"
                       value={formData.guests}
                       onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+                      className="w-full"
                     />
                   </div>
                   {/* Book Button */}

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Star, Wifi, Car, Coffee, Users, Bath, Heart, Filter, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 
 const properties = [
@@ -96,10 +97,11 @@ const properties = [
 ];
 
 const Properties = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-primary to-accent">
         <div className="container mx-auto px-4 text-center">
@@ -107,25 +109,26 @@ const Properties = () => {
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Browse through our carefully curated collection of accommodations across Kenya
           </p>
-          
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-secondary">500+</div>
-              <div className="text-white/80">Properties</div>
+            <div className="text-center animate-fade-in hover-scale transform transition-all duration-300 group" style={{ animationDelay: '0s' }}>
+              <div className="text-5xl font-bold text-secondary animate-bounce group-hover:scale-110 transition-transform duration-300">500+</div>
+              <div className="text-white/80 font-medium group-hover:text-white transition-colors">Properties</div>
+              <div className="text-secondary/80 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Across Kenya</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-secondary">50+</div>
-              <div className="text-white/80">Destinations</div>
+            <div className="text-center animate-fade-in hover-scale transform transition-all duration-300 group" style={{ animationDelay: '0.2s' }}>
+              <div className="text-5xl font-bold text-secondary animate-bounce group-hover:scale-110 transition-transform duration-300">50+</div>
+              <div className="text-white/80 font-medium group-hover:text-white transition-colors">Destinations</div>
+              <div className="text-secondary/80 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Prime Locations</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-secondary">4.8★</div>
-              <div className="text-white/80">Average Rating</div>
+            <div className="text-center animate-fade-in hover-scale transform transition-all duration-300 group" style={{ animationDelay: '0.4s' }}>
+              <div className="text-5xl font-bold text-secondary animate-bounce group-hover:scale-110 transition-transform duration-300">4.8★</div>
+              <div className="text-white/80 font-medium group-hover:text-white transition-colors">Average Rating</div>
+              <div className="text-secondary/80 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Excellent Reviews</div>
             </div>
           </div>
         </div>
       </section>
-
       {/* Filters Section */}
       <section className="py-8 bg-muted/30 sticky top-0 z-40 border-b">
         <div className="container mx-auto px-4">
@@ -140,7 +143,6 @@ const Properties = () => {
                 />
               </div>
             </div>
-
             {/* Filters */}
             <div className="flex gap-3 flex-wrap">
               <Select>
@@ -153,7 +155,6 @@ const Properties = () => {
                   <SelectItem value="high">KSh 10,000+</SelectItem>
                 </SelectContent>
               </Select>
-
               <Select>
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Guests" />
@@ -165,7 +166,6 @@ const Properties = () => {
                   <SelectItem value="6">6+ Guests</SelectItem>
                 </SelectContent>
               </Select>
-
               <Select>
                 <SelectTrigger className="w-36">
                   <SelectValue placeholder="Property Type" />
@@ -177,7 +177,6 @@ const Properties = () => {
                   <SelectItem value="camp">Safari Camp</SelectItem>
                 </SelectContent>
               </Select>
-
               <Button variant="outline" size="icon">
                 <Filter className="h-4 w-4" />
               </Button>
@@ -185,7 +184,6 @@ const Properties = () => {
           </div>
         </div>
       </section>
-
       {/* Properties Grid */}
       <section className="py-12">
         <div className="container mx-auto px-4">
@@ -206,10 +204,9 @@ const Properties = () => {
               </SelectContent>
             </Select>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((property) => (
-              <Card key={property.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+              <Card key={property.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer" onClick={() => navigate(`/property/${property.id}`)}>
                 {/* Property Image */}
                 <div className="relative overflow-hidden">
                   <img 
@@ -217,7 +214,6 @@ const Properties = () => {
                     alt={property.name}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  
                   {/* Badges */}
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     {property.featured && (
@@ -231,7 +227,6 @@ const Properties = () => {
                       </Badge>
                     )}
                   </div>
-
                   {/* Rating & Wishlist */}
                   <div className="absolute top-4 right-4 flex flex-col gap-2">
                     <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded flex items-center space-x-1">
@@ -243,7 +238,6 @@ const Properties = () => {
                     </Button>
                   </div>
                 </div>
-
                 <CardContent className="p-6">
                   <div className="space-y-4">
                     {/* Property Info */}
@@ -259,7 +253,6 @@ const Properties = () => {
                         {property.reviews} reviews
                       </div>
                     </div>
-
                     {/* Property Details */}
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                       <div className="flex items-center space-x-4">
@@ -277,7 +270,6 @@ const Properties = () => {
                         </div>
                       </div>
                     </div>
-
                     {/* Amenities */}
                     <div className="flex flex-wrap gap-2">
                       {property.amenities.slice(0, 3).map((amenity, index) => (
@@ -291,7 +283,6 @@ const Properties = () => {
                         </Badge>
                       )}
                     </div>
-
                     {/* Price and CTA */}
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div>
@@ -305,7 +296,13 @@ const Properties = () => {
                         </div>
                         <span className="text-muted-foreground text-sm">/night</span>
                       </div>
-                      <Button className="bg-primary hover:bg-primary/90">
+                      <Button 
+                        className="bg-primary hover:bg-primary/90"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/property/${property.id}`);
+                        }}
+                      >
                         Book Now
                       </Button>
                     </div>
@@ -314,7 +311,6 @@ const Properties = () => {
               </Card>
             ))}
           </div>
-
           {/* Load More */}
           <div className="text-center mt-12">
             <Button variant="outline" size="lg" className="px-8">
