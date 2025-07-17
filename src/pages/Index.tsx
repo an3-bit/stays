@@ -1,11 +1,94 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PropertySection from "@/components/PropertySection";
 import HeroSection from "@/components/HeroSection";
-// @ts-expect-error: no types for aos
+
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { Link } from 'react-router-dom';
+import { Calendar } from "@/components/ui/calendar";
+import { Users, BedDouble, Bath, Home } from "lucide-react";
+import { format } from "date-fns";
+
+// Modal component for property details
+function PropertyModal({ property, onClose }: { property: any, onClose: () => void }) {
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({ from: undefined, to: undefined });
+  const [guests, setGuests] = useState(1);
+  if (!property) return null;
+  // Placeholder facts
+  const facts = {
+    guests: property.guests || 2,
+    bedrooms: property.bedrooms || 1,
+    beds: property.beds || 1,
+    bathrooms: property.bathrooms || 1,
+    location: property.location || "Kenya",
+    region: property.region || "Coast"
+  };
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-2 py-6 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl relative flex flex-col md:flex-row">
+        <button onClick={onClose} className="absolute top-3 right-3 text-gray-500 hover:text-black text-2xl font-bold z-10">&times;</button>
+        {/* Left: Images and details */}
+        <div className="md:w-2/3 w-full p-6 flex flex-col">
+          <div className="relative w-full aspect-[3/2] mb-4">
+            <img src={property.image} alt={property.title} className="w-full h-full object-cover rounded-lg" />
+            {/* If more images, show a 'View photos' button */}
+            {/* <button className="absolute bottom-3 right-3 bg-white/80 px-4 py-2 rounded shadow text-sm font-semibold">View photos</button> */}
+          </div>
+          {/* Breadcrumb */}
+          <div className="text-sm text-gray-500 mb-2">
+            {facts.location} &gt; {facts.region}
+          </div>
+          {/* Title */}
+          <h2 className="text-3xl font-serif font-bold mb-2">{property.title}</h2>
+          {/* Key facts */}
+          <div className="flex flex-wrap gap-6 mb-4 text-gray-700 text-base items-center">
+            <span className="flex items-center gap-1"><Users className="w-5 h-5" /> {facts.guests} guests</span>
+            <span className="flex items-center gap-1"><BedDouble className="w-5 h-5" /> {facts.bedrooms} bedroom{facts.bedrooms > 1 ? 's' : ''}, {facts.beds} bed{facts.beds > 1 ? 's' : ''}</span>
+            <span className="flex items-center gap-1"><Bath className="w-5 h-5" /> {facts.bathrooms} bathroom{facts.bathrooms > 1 ? 's' : ''}</span>
+          </div>
+          {/* Description */}
+          <p className="text-gray-600 mb-6">{property.desc}</p>
+        </div>
+        {/* Right: Booking panel */}
+        <div className="md:w-1/3 w-full p-6 border-t md:border-t-0 md:border-l border-gray-100 flex flex-col justify-start">
+          <div className="bg-gray-50 rounded-xl p-5 shadow-sm">
+            <div className="mb-4 text-gray-700 font-semibold">Add dates for price</div>
+            {/* Date picker */}
+            <div className="mb-3">
+              <label className="block text-sm font-medium mb-1">Select dates</label>
+              <Calendar
+                mode="range"
+                selected={dateRange}
+                onSelect={(range) => {
+                  if (range && range.from && range.to) {
+                    setDateRange({ from: range.from, to: range.to });
+                  } else if (range && range.from) {
+                    setDateRange({ from: range.from, to: range.from });
+                  } else {
+                    setDateRange({ from: undefined, to: undefined });
+                  }
+                }}
+                numberOfMonths={1}
+              />
+            </div>
+            {/* Guest selector */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Guests</label>
+              <div className="flex items-center gap-2">
+                <button type="button" className="border rounded-full w-8 h-8 flex items-center justify-center text-lg" onClick={() => setGuests(g => Math.max(1, g - 1))}>-</button>
+                <span>{guests}</span>
+                <button type="button" className="border rounded-full w-8 h-8 flex items-center justify-center text-lg" onClick={() => setGuests(g => g + 1)}>+</button>
+              </div>
+            </div>
+            <button className="w-full py-3 bg-orange-500 text-white rounded-full font-semibold text-lg hover:bg-orange-600 transition-colors">Check availability</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // Refined property data with Pexels images and more properties per section
 const propertyGroups = [
@@ -161,6 +244,7 @@ const Index = () => {
   useEffect(() => {
     AOS.init({ duration: 900, once: true });
   }, []);
+  const [selectedProperty, setSelectedProperty] = useState(null);
   return (
     <>
       <div className="relative min-h-[70vh] bg-cover bg-center" style={{ backgroundImage: `url('/src/assets/bg.jpg')` }}>
@@ -181,24 +265,24 @@ const Index = () => {
             <div className="flex space-x-6 overflow-x-auto pb-2">
               {[
                 {
-                  image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=600',
-                  location: 'DIÀ',
-                  name: 'Peach Sunlight, Majorca',
+                  image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=compress&w=600',
+                  location: 'MOUNT KENYA',
+                  name: 'Alpine View Cabin',
                 },
                 {
-                  image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=600',
-                  location: 'GREAT YARMOUTH',
-                  name: 'The Norfolk Beacon, Norfolk',
+                  image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=compress&w=600',
+                  location: 'DIANI BEACH',
+                  name: 'Oceanfront Treehouse',
                 },
                 {
-                  image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=600',
-                  location: 'VILA DE GRÀCIA',
-                  name: 'The Epicurean Spirit, Gràcia',
+                  image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=compress&w=600',
+                  location: 'MAASAI MARA',
+                  name: 'Savannah Panorama Lodge',
                 },
                 {
-                  image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=600',
-                  location: 'LONDON',
-                  name: 'The New Vibes, England',
+                  image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=compress&w=600',
+                  location: 'LAKE NAIVASHA',
+                  name: 'Lakeview Glass House',
                 },
               ].map((card, i) => (
                 <div key={i} className="min-w-[220px] flex-shrink-0">
@@ -299,44 +383,64 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {[
               {
+                id: 1,
                 title: 'Diani Beach Villa',
+                type: 'Villa',
                 image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800',
                 desc: 'A stunning beachfront villa in Diani, Kenya.'
               },
               {
+                id: 2,
                 title: 'Maasai Mara Safari Lodge',
+                type: 'Deluxe Suite',
                 image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800',
                 desc: 'Experience the wild in luxury at Maasai Mara.'
               },
               {
+                id: 3,
                 title: 'Nairobi City Apartment',
+                type: 'Apartment',
                 image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800',
                 desc: 'Modern comfort in the heart of Nairobi.'
               },
               {
+                id: 4,
                 title: 'Mount Kenya Retreat',
+                type: 'Retreat',
                 image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800',
                 desc: 'A peaceful escape with breathtaking mountain views.'
               },
               {
+                id: 5,
                 title: 'Watamu Beach House',
+                type: 'Beach House',
                 image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800',
                 desc: 'Relax in a beautiful home on Watamu’s white sands.'
               },
               {
+                id: 6,
                 title: 'Lamu Island Hideaway',
+                type: 'Deluxe Suite',
                 image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800',
                 desc: 'Traditional Swahili charm on Lamu Island.'
               },
             ].map((stay, i) => (
-              <div key={i} className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-shadow cursor-pointer group">
+              <Link
+                key={stay.id}
+                to={`/property/${stay.id}`}
+                className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl hover:scale-[1.025] transition-transform transition-shadow duration-200 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-orange-400"
+                tabIndex={0}
+                aria-label={`View details for ${stay.title}`}
+                style={{ textDecoration: 'none' }}
+              >
                 <img src={stay.image} alt={stay.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="p-5">
+                  <span className="inline-block mb-2 px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">{stay.type}</span>
                   <h4 className="text-xl font-semibold mb-2 text-foreground">{stay.title}</h4>
-                  <p className="text-muted-foreground text-sm">{stay.desc}</p>
-                  <button className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-full font-semibold hover:bg-orange-600 transition-colors">View Details</button>
+                  <p className="text-muted-foreground text-sm mb-4">{stay.desc}</p>
+                  <span className="inline-block mt-2 px-4 py-2 bg-orange-500 text-white rounded-full font-semibold text-sm group-hover:bg-orange-600 transition-colors">View Details</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

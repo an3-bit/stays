@@ -13,43 +13,46 @@ import { useState } from "react";
 const properties = [
   {
     id: 1,
-    name: "Safari Lodge Nairobi",
-    location: "Kilimani, Nairobi",
-    price: "KSh 8,500",
-    rating: 4.8,
-    reviews: 124,
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?q=80&w=800",
-    amenities: ["Wi-Fi", "Parking", "Kitchen", "Pool"],
-    beds: 3,
-    baths: 2,
-    guests: 6
+    title: 'Diani Beach Villa',
+    type: 'Villa',
+    image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800',
+    desc: 'A stunning beachfront villa in Diani, Kenya.'
   },
   {
     id: 2,
-    name: "Coastal Retreat Mombasa",
-    location: "Diani Beach, Mombasa",
-    price: "KSh 12,000",
-    rating: 4.9,
-    reviews: 89,
-    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=800",
-    amenities: ["Wi-Fi", "Beach Access", "AC", "Pool"],
-    beds: 4,
-    baths: 3,
-    guests: 8
+    title: 'Maasai Mara Safari Lodge',
+    type: 'Deluxe Suite',
+    image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800',
+    desc: 'Experience the wild in luxury at Maasai Mara.'
   },
   {
     id: 3,
-    name: "Mountain View Villa",
-    location: "Nanyuki, Mt. Kenya",
-    price: "KSh 6,800",
-    rating: 4.7,
-    reviews: 67,
-    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=800",
-    amenities: ["Wi-Fi", "Fireplace", "Garden", "Parking"],
-    beds: 2,
-    baths: 2,
-    guests: 4
-  }
+    title: 'Nairobi City Apartment',
+    type: 'Apartment',
+    image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800',
+    desc: 'Modern comfort in the heart of Nairobi.'
+  },
+  {
+    id: 4,
+    title: 'Mount Kenya Retreat',
+    type: 'Retreat',
+    image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800',
+    desc: 'A peaceful escape with breathtaking mountain views.'
+  },
+  {
+    id: 5,
+    title: 'Watamu Beach House',
+    type: 'Beach House',
+    image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800',
+    desc: 'Relax in a beautiful home on Watamu’s white sands.'
+  },
+  {
+    id: 6,
+    title: 'Lamu Island Hideaway',
+    type: 'Deluxe Suite',
+    image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800',
+    desc: 'Traditional Swahili charm on Lamu Island.'
+  },
 ];
 
 const PropertyDetails = () => {
@@ -96,50 +99,46 @@ const PropertyDetails = () => {
             <div className="relative h-80 md:h-auto">
               <img
                 src={property.image}
-                alt={property.name}
+                alt={property.title}
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-4 left-4">
-                <Badge className="bg-secondary text-secondary-foreground">Popular</Badge>
+                <Badge className="bg-secondary text-secondary-foreground">{property.type}</Badge>
               </div>
               <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded flex items-center space-x-1">
                 <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                <span className="text-sm font-medium">{property.rating}</span>
+                <span className="text-sm font-medium">4.8</span>
               </div>
             </div>
             {/* Details */}
             <CardContent className="p-8 flex flex-col justify-center">
-              <h1 className="text-3xl font-bold mb-2">{property.name}</h1>
+              <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
               <div className="flex items-center text-muted-foreground mb-4">
                 <MapPin className="h-4 w-4 mr-2" />
-                <span>{property.location}</span>
+                <span>Kilimani, Nairobi</span>
               </div>
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-lg font-semibold text-primary">{property.price}</span>
+                <span className="text-lg font-semibold text-primary">KSh 8,500</span>
                 <span className="text-muted-foreground">/night</span>
                 <span className="flex items-center text-sm text-muted-foreground">
                   <Star className="h-4 w-4 text-yellow-500 mr-1" />
-                  {property.rating} ({property.reviews} reviews)
+                  4.8 (124 reviews)
                 </span>
               </div>
               <div className="flex items-center gap-6 mb-4">
                 <div className="flex items-center">
-                  <Users className="h-4 w-4 mr-1" /> {property.guests} guests
+                  <Users className="h-4 w-4 mr-1" /> 6 guests
                 </div>
                 <div className="flex items-center">
-                  <span className="mr-1">🛏️</span> {property.beds} beds
+                  <span className="mr-1">🛏️</span> 3 beds
                 </div>
                 <div className="flex items-center">
-                  <Bath className="h-4 w-4 mr-1" /> {property.baths} baths
+                  <Bath className="h-4 w-4 mr-1" /> 2 baths
                 </div>
               </div>
               <div className="mb-6">
-                <h4 className="font-semibold mb-2">Amenities</h4>
-                <div className="flex flex-wrap gap-2">
-                  {property.amenities.map((amenity, idx) => (
-                    <Badge key={idx} variant="outline">{amenity}</Badge>
-                  ))}
-                </div>
+                <h4 className="font-semibold mb-2">Description</h4>
+                <p className="text-muted-foreground">{property.desc}</p>
               </div>
               <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
                 <DialogTrigger asChild>
@@ -149,7 +148,7 @@ const PropertyDetails = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle className="text-primary">Book {property.name}</DialogTitle>
+                    <DialogTitle className="text-primary">Book {property.title}</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleBookingSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
