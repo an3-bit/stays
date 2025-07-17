@@ -70,8 +70,18 @@ const PropertyDetails = () => {
     message: ""
   });
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Send booking details to backend
+    try {
+      await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, propertyId: property.id })
+      });
+    } catch (err) {
+      // Optionally handle error (e.g., show a toast)
+    }
     setIsBookingOpen(false);
     navigate("/booking-confirmation");
   };
