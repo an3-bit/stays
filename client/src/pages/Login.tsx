@@ -14,6 +14,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log('Attempting to log in...');
         try {
             const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/auth/login', {
                 method: 'POST',
@@ -60,7 +61,7 @@ const Login = () => {
                                 required
                             />
                         </div>
-                        <Button type="submit" className="w-full" onClick={handleLogin}>
+                        <Button type="submit" className="w-full">
                             Login
                         </Button>
                     </form>
