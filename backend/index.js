@@ -2,8 +2,10 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const dotenv = require('dotenv');
-dotenv.config();
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -15,7 +17,11 @@ const {
   MPESA_SHORTCODE,
   MPESA_PASSKEY,
   MPESA_CALLBACK_URL,
-  PORT = 5000
+  PORT = 5000,
+  EMAIL_HOST,
+  EMAIL_PORT,
+  EMAIL_USER,
+  EMAIL_PASS
 } = process.env;
 
 // MongoDB connection
@@ -33,9 +39,70 @@ const bookingSchema = new mongoose.Schema({
   checkOut: String,
   guests: String,
   message: String,
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  checkoutRequestId: String,
+  paymentStatus: { type: String, default: 'pending' }
 });
 const Booking = mongoose.model('Booking', bookingSchema);
+
+// Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: EMAIL_HOST,
+  port: EMAIL_PORT,
+  secure: EMAIL_PORT == 465, // true for 465, false for other ports
+  auth: {
+    user: EMAIL_USER,
+    pass: EMAIL_PASS,
+  },
+});
+
+async function sendBookingConfirmationEmail(booking, amount) {
+  const mailOptions = {
+    from: `"Safari Stays" <${EMAIL_USER}>`,
+    to: booking.email,
+    subject: 'Booking Confirmation and Payment Receipt',
+    html: `
+      <h1>Booking Confirmation</h1>
+      <p>Dear ${booking.name},</p>
+      <p>Thank you for your booking with Safari Stays.</p>
+      <h2>Booking Details:</h2>
+      <ul>
+        <li><b>Property ID:</b> ${booking.propertyId}</li>
+        <li><b>Check-in:</b> ${new Date(booking.checkIn).toLocaleDateString()}</li>
+        <li><b>Check-out:</b> ${new Date(booking.checkOut).toLocaleDateString()}</li>
+        <li><b>Guests:</b> ${booking.guests}</li>
+      </ul>
+      <h2>Payment Details:</h2>
+      <p><b>Amount Paid:</b> KES ${amount}</p>
+      <p><b>Transaction Status:</b> Paid</p>
+      <p>We look forward to hosting you.</p>
+      <p>Best regards,<br/>The Safari Stays Team</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Confirmation email sent to', booking.email);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
+
+// Helper function to format phone numbers to 254xxxxxxxxx format
+function formatPhoneNumber(phone) {
+  const cleaned = ('' + phone).replace(/\D/g, ''); // Ensure it's a string and remove non-digits
+  if (cleaned.startsWith('254')) {
+    return cleaned.substring(0, 12); // Ensure it's 12 digits long
+  }
+  if (cleaned.startsWith('0')) {
+    return `254${cleaned.substring(1)}`.substring(0, 12);
+  }
+  if (cleaned.length === 9) { // For numbers like 7... or 1...
+    return `254${cleaned}`.substring(0, 12);
+  }
+  // If it doesn't match known formats, it might be invalid. Return as is.
+  return cleaned;
+}
 
 // Get M-Pesa access token
 async function getAccessToken() {
@@ -48,8 +115,11 @@ async function getAccessToken() {
 
 // Initiate STK Push
 app.post('/api/mpesa/stkpush', async (req, res) => {
-  const { phone, amount } = req.body;
-  if (!phone || !amount) return res.status(400).json({ error: 'Phone and amount required' });
+  const { phone, amount, bookingId } = req.body;
+  if (!phone || !amount || !bookingId) return res.status(400).json({ error: 'Phone, amount, and bookingId are required' });
+  
+  const formattedPhone = formatPhoneNumber(phone);
+
   try {
     const access_token = await getAccessToken();
     const timestamp = new Date().toISOString().replace(/[^0-9]/g, '').slice(0, 14);
@@ -60,9 +130,9 @@ app.post('/api/mpesa/stkpush', async (req, res) => {
       Timestamp: timestamp,
       TransactionType: 'CustomerPayBillOnline',
       Amount: amount,
-      PartyA: phone,
+      PartyA: formattedPhone,
       PartyB: MPESA_SHORTCODE,
-      PhoneNumber: phone,
+      PhoneNumber: formattedPhone,
       CallBackURL: MPESA_CALLBACK_URL,
       AccountReference: 'SafariStays',
       TransactionDesc: 'Booking Payment'
@@ -70,9 +140,25 @@ app.post('/api/mpesa/stkpush', async (req, res) => {
     const stkRes = await axios.post('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', payload, {
       headers: { Authorization: `Bearer ${access_token}` }
     });
+
+    const checkoutRequestId = stkRes.data.CheckoutRequestID;
+    await Booking.findByIdAndUpdate(bookingId, { checkoutRequestId });
+
     res.json(stkRes.data);
   } catch (err) {
-    res.status(500).json({ error: err.response?.data || err.message });
+    console.error('STK PUSH ERROR:', err.response?.data || err.message);
+    let errorMessage = 'An error occurred during M-Pesa STK push.';
+    if (err.response?.data) {
+      if (typeof err.response.data === 'object') {
+        // Safaricom API often returns error details in `errorMessage`
+        errorMessage = err.response.data.errorMessage || JSON.stringify(err.response.data);
+      } else {
+        errorMessage = err.response.data;
+      }
+    } else {
+      errorMessage = err.message;
+    }
+    res.status(500).json({ error: errorMessage });
   }
 });
 
@@ -85,6 +171,48 @@ app.post('/api/bookings', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// M-Pesa Callback Endpoint
+app.post('/api/mpesa/callback', async (req, res) => {
+  console.log('M-Pesa Callback Received:');
+  
+  const callbackData = req.body;
+  console.log(JSON.stringify(callbackData, null, 2));
+
+  if (!callbackData.Body || !callbackData.Body.stkCallback || !callbackData.Body.stkCallback.CheckoutRequestID) {
+    return res.status(200).json({ message: 'Callback received but no STK data.' });
+  }
+  
+  const checkoutRequestId = callbackData.Body.stkCallback.CheckoutRequestID;
+
+  try {
+    const resultCode = callbackData.Body.stkCallback.ResultCode;
+
+    if (resultCode === 0) {
+      const metadata = callbackData.Body.stkCallback.CallbackMetadata.Item;
+      const amount = metadata.find(item => item.Name === 'Amount').Value;
+      
+      const booking = await Booking.findOneAndUpdate(
+        { checkoutRequestId },
+        { paymentStatus: 'paid' },
+        { new: true }
+      );
+      
+      if (booking) {
+        await sendBookingConfirmationEmail(booking, amount);
+      } else {
+        console.error('Booking not found for CheckoutRequestID:', checkoutRequestId);
+      }
+    } else {
+      await Booking.findOneAndUpdate({ checkoutRequestId }, { paymentStatus: 'failed' });
+      console.log('M-Pesa transaction failed.');
+    }
+  } catch (err) {
+    console.error('Error processing M-Pesa callback:', err.message);
+  }
+  
+  res.status(200).json({ message: 'Callback received successfully' });
 });
 
 app.get('/', (req, res) => res.send('M-Pesa Backend Running'));

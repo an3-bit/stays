@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const properties = [
   {
@@ -16,42 +17,48 @@ const properties = [
     title: 'Diani Beach Villa',
     type: 'Villa',
     image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800',
-    desc: 'A stunning beachfront villa in Diani, Kenya.'
+    desc: 'A stunning beachfront villa in Diani, Kenya.',
+    price: 15000
   },
   {
     id: 2,
     title: 'Maasai Mara Safari Lodge',
     type: 'Deluxe Suite',
     image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800',
-    desc: 'Experience the wild in luxury at Maasai Mara.'
+    desc: 'Experience the wild in luxury at Maasai Mara.',
+    price: 25000
   },
   {
     id: 3,
     title: 'Nairobi City Apartment',
     type: 'Apartment',
     image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800',
-    desc: 'Modern comfort in the heart of Nairobi.'
+    desc: 'Modern comfort in the heart of Nairobi.',
+    price: 8500
   },
   {
     id: 4,
     title: 'Mount Kenya Retreat',
     type: 'Retreat',
     image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800',
-    desc: 'A peaceful escape with breathtaking mountain views.'
+    desc: 'A peaceful escape with breathtaking mountain views.',
+    price: 12000
   },
   {
     id: 5,
     title: 'Watamu Beach House',
     type: 'Beach House',
     image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800',
-    desc: 'Relax in a beautiful home on Watamu’s white sands.'
+    desc: 'Relax in a beautiful home on Watamu’s white sands.',
+    price: 18000
   },
   {
     id: 6,
     title: 'Lamu Island Hideaway',
     type: 'Deluxe Suite',
     image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800',
-    desc: 'Traditional Swahili charm on Lamu Island.'
+    desc: 'Traditional Swahili charm on Lamu Island.',
+    price: 22000
   },
 ];
 
@@ -60,6 +67,7 @@ const PropertyDetails = () => {
   const navigate = useNavigate();
   const property = properties.find((p) => p.id === Number(id));
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -72,18 +80,39 @@ const PropertyDetails = () => {
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Send booking details to backend
+    
+    toast({
+      title: "Confirming your booking...",
+      description: "Please wait a moment.",
+    });
+
     try {
-      await fetch("http://localhost:5000/api/bookings", {
+      // Send booking details to backend
+      const bookingResponse = await fetch("http://localhost:5000/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, propertyId: property.id })
+        body: JSON.stringify({ ...formData, propertyId: property?.id })
       });
+
+      if (!bookingResponse.ok) {
+        throw new Error("Failed to create booking. Please try again.");
+      }
+
+      const { booking } = await bookingResponse.json();
+      
+      setIsBookingOpen(false);
+      
+      // Navigate to the intermediate submission confirmation page
+      navigate("/booking-submitted", { state: { booking, property } });
+
     } catch (err) {
-      // Optionally handle error (e.g., show a toast)
+      console.error("Booking submission failed:", err);
+      toast({
+        title: "Error",
+        description: (err as Error).message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
     }
-    setIsBookingOpen(false);
-    navigate("/booking-confirmation");
   };
 
   if (!property) {
@@ -128,7 +157,7 @@ const PropertyDetails = () => {
                 <span>Kilimani, Nairobi</span>
               </div>
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-lg font-semibold text-primary">KSh 8,500</span>
+                <span className="text-lg font-semibold text-primary">KSh {property.price.toLocaleString()}</span>
                 <span className="text-muted-foreground">/night</span>
                 <span className="flex items-center text-sm text-muted-foreground">
                   <Star className="h-4 w-4 text-yellow-500 mr-1" />

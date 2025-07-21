@@ -1,229 +1,197 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Home, Phone, Mail } from "lucide-react";
-import { Link } from "react-router-dom";
-// import Navigation from "@/components/Navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import Footer from "@/components/Footer";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useState } from "react";
-
-const PaymentSection = () => {
-  const [showOptions, setShowOptions] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [mpesaPhone, setMpesaPhone] = useState("");
-  const [mpesaSent, setMpesaSent] = useState(false);
-  const [mpesaError, setMpesaError] = useState<string | null>(null);
-  const [cardDetails, setCardDetails] = useState({ number: "", expiry: "", cvc: "" });
-  const [paypalEmail, setPaypalEmail] = useState("");
-  const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  // Simulate amount for demo
-  const amount = 1000;
-
-  const handleMpesaPay = async () => {
-    setProcessing(true);
-    setMpesaError(null);
-    setSuccess(null);
-    try {
-      // For demo, use local backend if available
-      const res = await fetch("http://localhost:5000/api/mpesa/stkpush", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: mpesaPhone, amount })
-      });
-      const data = await res.json();
-      if (res.ok && data.CheckoutRequestID) {
-        setMpesaSent(true);
-        setSuccess("STK Push sent! Check your phone to complete the payment.");
-      } else {
-        setMpesaError(data.error?.errorMessage || "Failed to initiate M-Pesa payment.");
-      }
-    } catch (err) {
-      setMpesaError("Could not connect to payment server.");
-    }
-    setProcessing(false);
-  };
-
-  const handleCardPay = () => {
-    setProcessing(true);
-    setSuccess(null);
-    setTimeout(() => {
-      setProcessing(false);
-      setSuccess("Card payment processed (simulated)");
-    }, 2000);
-  };
-
-  const handlePaypalPay = () => {
-    setProcessing(true);
-    setSuccess(null);
-    setTimeout(() => {
-      setProcessing(false);
-      setSuccess("PayPal payment processed (simulated)");
-    }, 2000);
-  };
-
-  return (
-    <div className="bg-card border border-border rounded-lg p-6 mt-8">
-      <h2 className="text-xl font-semibold text-primary mb-4">Complete Your Payment</h2>
-      {!showOptions ? (
-        <Button className="bg-primary hover:bg-primary/90 w-full" size="lg" onClick={() => setShowOptions(true)}>
-          Proceed to Pay
-        </Button>
-      ) : (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
-            <Button variant={selected === "mpesa" ? "default" : "outline"} className="flex-1" onClick={() => setSelected("mpesa")}>M-Pesa</Button>
-            <Button variant={selected === "paypal" ? "default" : "outline"} className="flex-1" onClick={() => setSelected("paypal")}>PayPal</Button>
-            <Button variant={selected === "card" ? "default" : "outline"} className="flex-1" onClick={() => setSelected("card")}>Debit/Credit Card</Button>
-          </div>
-          {/* Payment Forms */}
-          {selected === "mpesa" && (
-            <div className="space-y-4">
-              <label className="block text-sm font-medium mb-1">M-Pesa Phone Number</label>
-              <input
-                type="tel"
-                className="border rounded px-3 py-2 w-full"
-                placeholder="e.g. 07XXXXXXXX"
-                value={mpesaPhone}
-                onChange={e => setMpesaPhone(e.target.value)}
-                disabled={processing || mpesaSent}
-              />
-              <Button className="w-full bg-green-600 hover:bg-green-700" onClick={handleMpesaPay} disabled={processing || !mpesaPhone || mpesaSent}>
-                {processing ? "Processing..." : mpesaSent ? "STK Push Sent!" : "Pay with M-Pesa"}
-              </Button>
-              {mpesaError && <div className="text-red-600 mt-2">{mpesaError}</div>}
-              {success && <div className="text-green-700 mt-2">{success}</div>}
-            </div>
-          )}
-          {selected === "paypal" && (
-            <div className="space-y-4">
-              <label className="block text-sm font-medium mb-1">PayPal Email</label>
-              <input
-                type="email"
-                className="border rounded px-3 py-2 w-full"
-                placeholder="your@email.com"
-                value={paypalEmail}
-                onChange={e => setPaypalEmail(e.target.value)}
-                disabled={processing}
-              />
-              <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handlePaypalPay} disabled={processing || !paypalEmail}>
-                {processing ? "Processing..." : "Pay with PayPal"}
-              </Button>
-              {success && <div className="text-green-700 mt-2">{success}</div>}
-            </div>
-          )}
-          {selected === "card" && (
-            <div className="space-y-4">
-              <label className="block text-sm font-medium mb-1">Card Number</label>
-              <input
-                type="text"
-                className="border rounded px-3 py-2 w-full"
-                placeholder="1234 5678 9012 3456"
-                value={cardDetails.number}
-                onChange={e => setCardDetails({ ...cardDetails, number: e.target.value })}
-                disabled={processing}
-              />
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  className="border rounded px-3 py-2 w-1/2"
-                  placeholder="MM/YY"
-                  value={cardDetails.expiry}
-                  onChange={e => setCardDetails({ ...cardDetails, expiry: e.target.value })}
-                  disabled={processing}
-                />
-                <input
-                  type="text"
-                  className="border rounded px-3 py-2 w-1/2"
-                  placeholder="CVC"
-                  value={cardDetails.cvc}
-                  onChange={e => setCardDetails({ ...cardDetails, cvc: e.target.value })}
-                  disabled={processing}
-                />
-              </div>
-              <Button className="w-full bg-primary hover:bg-primary/90" onClick={handleCardPay} disabled={processing || !cardDetails.number || !cardDetails.expiry || !cardDetails.cvc}>
-                {processing ? "Processing..." : "Pay with Card"}
-              </Button>
-              {success && <div className="text-green-700 mt-2">{success}</div>}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
+import { useToast } from "@/components/ui/use-toast";
+import { CreditCard, Smartphone } from "lucide-react";
 
 const BookingConfirmation = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { booking, property } = location.state || {};
+  
+  const [selectedPayment, setSelectedPayment] = useState("mpesa");
+  const [mpesaPhone, setMpesaPhone] = useState(booking?.phone || "");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleMpesaPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mpesaPhone) {
+      toast({
+        title: "Phone number required",
+        description: "Please enter a phone number to proceed.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+    toast({
+      title: "Initiating M-Pesa Payment...",
+      description: "Please check your phone to complete the transaction.",
+    });
+
+    try {
+      const response = await fetch("http://localhost:5000/api/mpesa/stkpush", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: mpesaPhone,
+          amount: property.price,
+          bookingId: booking._id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to initiate M-Pesa payment.");
+      }
+      
+      toast({
+        title: "Payment Initiated!",
+        description: "Please check your phone to complete the M-Pesa payment.",
+      });
+
+      navigate("/thank-you", { state: { booking, property, amount: property.price } });
+
+    } catch (err) {
+      console.error("M-Pesa payment failed:", err);
+      toast({
+        title: "Payment Error",
+        description: (err as Error).message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  if (!booking || !property) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-2xl font-bold text-destructive mb-4">Booking Data Not Found</h1>
+          <p className="text-muted-foreground mb-6">
+            We couldn't find your booking details. Please return to the homepage and try again.
+          </p>
+          <Button onClick={() => navigate("/")}>Go to Homepage</Button>
+        </div>
+      </div>
+    );
+  }
+
+  const renderPaymentForm = () => {
+    switch (selectedPayment) {
+      case "mpesa":
+        return (
+          <form onSubmit={handleMpesaPayment} className="space-y-4 pt-4">
+            <div>
+              <Label htmlFor="mpesa-phone" className="font-semibold">M-Pesa Phone Number</Label>
+              <Input
+                id="mpesa-phone"
+                type="tel"
+                placeholder="e.g., 0712345678"
+                value={mpesaPhone}
+                onChange={(e) => setMpesaPhone(e.target.value)}
+                required
+                className="mt-1"
+                disabled={isProcessing}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                An STK push will be sent to this number to complete the payment.
+              </p>
+            </div>
+            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 font-bold" disabled={isProcessing}>
+              {isProcessing ? "Processing..." : `Pay KSh ${property.price.toLocaleString()}`}
+            </Button>
+          </form>
+        );
+      case "paypal":
+        return <div className="text-center p-8 border rounded-lg mt-4"><p>PayPal payment option is coming soon.</p></div>;
+      case "card":
+        return <div className="text-center p-8 border rounded-lg mt-4"><p>Credit/Debit Card payment is coming soon.</p></div>;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* <Navigation /> */}
-      <main className="container mx-auto px-4 py-16">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="mb-8">
-            <CheckCircle className="h-16 w-16 text-primary mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-primary mb-4">
-              Booking Request Submitted!
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Thank you for choosing Safari Stays. We have received your booking request and our team will contact you shortly to confirm your reservation and assist with any special requirements.
-            </p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Complete Your Payment</h1>
+            <p className="text-muted-foreground">Choose a payment method to confirm your booking for <strong>{property.title}</strong>.</p>
           </div>
 
-          {/* Payment Section - moved here */}
-          <PaymentSection />
-
-          <div className="bg-card border border-border rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-primary mb-4">What happens next?</h2>
-            <div className="space-y-3 text-left">
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center text-sm font-bold mt-0.5">1</div>
-                <div>
-                  <p className="font-medium">Confirmation Call</p>
-                  <p className="text-sm text-muted-foreground">Our team will call you within 5 minutes to confirm your booking details.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Booking Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                 <div className="flex justify-between">
+                    <span className="font-semibold">Property:</span>
+                    <span>{property.title}</span>
                 </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center text-sm font-bold mt-0.5">2</div>
-                <div>
-                  <p className="font-medium">Payment Information</p>
-                  <p className="text-sm text-muted-foreground">We'll provide secure payment options and detailed pricing.</p>
+                <div className="flex justify-between">
+                    <span className="font-semibold">Dates:</span>
+                    <span>{new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}</span>
                 </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center text-sm font-bold mt-0.5">3</div>
-                <div>
-                  <p className="font-medium">Travel Guidelines</p>
-                  <p className="text-sm text-muted-foreground">Receive your booking confirmation and travel information.</p>
+                <div className="flex justify-between">
+                    <span className="font-semibold">Guests:</span>
+                    <span>{booking.guests}</span>
                 </div>
-              </div>
-            </div>
-          </div>
+                <Separator />
+                <div className="flex justify-between text-lg font-bold">
+                    <span className="font-semibold">Total Due:</span>
+                    <span>KSh {property.price.toLocaleString()}</span>
+                </div>
+              </CardContent>
+            </Card>
 
-          <div className="bg-muted/50 rounded-lg p-6 mb-8">
-            <h3 className="text-lg font-semibold text-primary mb-3">Need immediate assistance?</h3>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="tel:+254-xxx-xxx-xxx" className="flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors">
-                <Phone className="h-4 w-4" />
-                +254 XXX XXX XXX
-              </a>
-              <a href="mailto:bookings@safaristays.com" className="flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors">
-                <Mail className="h-4 w-4" />
-                bookings@safaristays.com
-              </a>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link to="/">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Home className="h-4 w-4" />
-                Back to Home
-              </Button>
-            </Link>
-            <Link to="/properties">
-              <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                Browse More Properties
-              </Button>
-            </Link>
+            <Card>
+              <CardHeader>
+                <CardTitle>Select Payment Method</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col space-y-2">
+                   <Button
+                    variant={selectedPayment === "mpesa" ? "secondary" : "ghost"}
+                    className="w-full justify-start gap-3"
+                    onClick={() => setSelectedPayment("mpesa")}
+                  >
+                    <Smartphone className="h-5 w-5"/>
+                    M-Pesa
+                  </Button>
+                   <Button
+                    variant={selectedPayment === "paypal" ? "secondary" : "ghost"}
+                    className="w-full justify-start gap-3"
+                    onClick={() => setSelectedPayment("paypal")}
+                    disabled
+                  >
+                    <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" className="w-5 h-5"/>
+                    PayPal
+                  </Button>
+                   <Button
+                    variant={selectedPayment === "card" ? "secondary" : "ghost"}
+                    className="w-full justify-start gap-3"
+                    onClick={() => setSelectedPayment("card")}
+                    disabled
+                  >
+                    <CreditCard className="h-5 w-5"/>
+                    Credit/Debit Card
+                  </Button>
+                </div>
+                <Separator className="my-4"/>
+                {renderPaymentForm()}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
