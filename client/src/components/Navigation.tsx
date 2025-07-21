@@ -166,11 +166,14 @@ const Navigation = () => {
                 </nav>
               </SheetContent>
             </Sheet>
-            <Link to="/login">
-              <Button variant="ghost" size="icon" className="h-8 w-8 bg-muted">
-                <User className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 bg-muted"
+              onClick={() => navigate('/login')}
+            >
+              <User className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </nav>

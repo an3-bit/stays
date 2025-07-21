@@ -60,7 +60,7 @@ const Login = () => {
                                 required
                             />
                         </div>
-                        <Button type="submit" className="w-full">
+                        <Button type="submit" className="w-full" onClick={handleLogin}>
                             Login
                         </Button>
                     </form>
