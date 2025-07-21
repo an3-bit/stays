@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: 'https://safari-stays-airbnbs.vercel.app/' // Allow only your frontend to make requests
+  origin: ['https://safari-stays-airbnbs.vercel.app', 'http://localhost:8080'] // Allow multiple origins
 }));
 
 const {
