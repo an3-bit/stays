@@ -161,7 +161,7 @@ app.post('/api/mpesa/stkpush', async (req, res) => {
       PartyA: formattedPhone,
       PartyB: MPESA_SHORTCODE,
       PhoneNumber: formattedPhone,
-      CallBackURL: MPESA_CALLBACK_URL,
+      CallBackURL: 'https://safari-stays-kenya-connect.onrender.com/api/mpesa/callback',
       AccountReference: 'SafariStays',
       TransactionDesc: 'Booking Payment'
     };
