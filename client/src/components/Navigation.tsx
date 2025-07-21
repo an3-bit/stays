@@ -166,9 +166,11 @@ const Navigation = () => {
                 </nav>
               </SheetContent>
             </Sheet>
-            <Button variant="ghost" size="icon" className="h-8 w-8 bg-muted">
-              <User className="h-4 w-4" />
-            </Button>
+            <Link to="/login">
+              <Button variant="ghost" size="icon" className="h-8 w-8 bg-muted">
+                <User className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
