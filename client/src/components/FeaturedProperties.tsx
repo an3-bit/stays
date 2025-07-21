@@ -11,7 +11,7 @@ const FeaturedProperties = () => {
   useEffect(() => {
     const fetchFeaturedProperties = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/properties?featured=true"); // Assuming an endpoint for featured
+        const response = await fetch("https://safari-stays-kenya-connect.onrender.com/api/properties?featured=true"); // Assuming an endpoint for featured
         if (!response.ok) {
           throw new Error("Failed to fetch");
         }

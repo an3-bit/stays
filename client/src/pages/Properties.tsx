@@ -60,7 +60,7 @@ const PropertyModal = ({ property, onClose }: { property: any, onClose: () => vo
       description: "Please wait a moment.",
     });
     try {
-      const bookingResponse = await fetch("http://localhost:5000/api/bookings", {
+      const bookingResponse = await fetch("https://safari-stays-kenya-connect.onrender.com/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, propertyId: property?._id })
@@ -240,7 +240,7 @@ const Properties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/properties");
+        const response = await fetch("https://safari-stays-kenya-connect.onrender.com/api/properties");
         if (!response.ok) {
           throw new Error("Failed to fetch properties");
         }

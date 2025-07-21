@@ -88,7 +88,7 @@ const PropertyDetails = () => {
 
     try {
       // Send booking details to backend
-      const bookingResponse = await fetch("http://localhost:5000/api/bookings", {
+      const bookingResponse = await fetch("https://safari-stays-kenya-connect.onrender.com/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, propertyId: property?.id })

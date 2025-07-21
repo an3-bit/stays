@@ -37,7 +37,7 @@ const BookingConfirmation = () => {
     });
 
     try {
-      const response = await fetch("http://localhost:5000/api/mpesa/stkpush", {
+      const response = await fetch("https://safari-stays-kenya-connect.onrender.com/api/mpesa/stkpush", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

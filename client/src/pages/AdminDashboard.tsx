@@ -39,12 +39,12 @@ const AdminDashboard = () => {
     }, []);
 
     const fetchProperties = async () => {
-        const res = await fetch('http://localhost:5000/api/properties');
+        const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/properties');
         setProperties(await res.json());
     };
 
     const fetchBookings = async () => {
-        const res = await fetch('http://localhost:5000/api/bookings');
+        const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/bookings');
         setBookings(await res.json());
     };
 
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
     // --- Property Management Logic ---
     const handleFormSubmit = async (e, propertyId) => {
         e.preventDefault();
-        const url = propertyId ? `http://localhost:5000/api/properties/${propertyId}` : 'http://localhost:5000/api/properties';
+        const url = propertyId ? `https://safari-stays-kenya-connect.onrender.com/api/properties/${propertyId}` : 'https://safari-stays-kenya-connect.onrender.com/api/properties';
         const method = propertyId ? 'PUT' : 'POST';
         const body = propertyId ? selectedProperty : newProperty;
 
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
     const handleDeleteProperty = async (propertyId) => {
         if (window.confirm('Are you sure?')) {
             try {
-                const res = await fetch(`http://localhost:5000/api/properties/${propertyId}`, { method: 'DELETE' });
+                const res = await fetch(`https://safari-stays-kenya-connect.onrender.com/api/properties/${propertyId}`, { method: 'DELETE' });
                 if (res.ok) {
                     toast({ title: 'Success', description: 'Property deleted' });
                     fetchProperties();
