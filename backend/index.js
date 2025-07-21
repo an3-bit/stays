@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
@@ -44,6 +46,30 @@ const bookingSchema = new mongoose.Schema({
   paymentStatus: { type: String, default: 'pending' }
 });
 const Booking = mongoose.model('Booking', bookingSchema);
+
+// Property Schema
+const propertySchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  type: { type: String, required: true },
+  desc: { type: String, required: true },
+  image: { type: String, required: true }, // URL to the image
+  price: { type: Number, required: true },
+  location: { type: String, required: true },
+  guests: { type: Number, required: true },
+  beds: { type: Number, required: true },
+  baths: { type: Number, required: true },
+  amenities: [String],
+  createdAt: { type: Date, default: Date.now }
+});
+const Property = mongoose.model('Property', propertySchema);
+
+// User Schema (for admin)
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
+const User = mongoose.model('User', userSchema);
+
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -172,6 +198,111 @@ app.post('/api/bookings', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Admin: Get all bookings
+app.get('/api/bookings', async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort({ createdAt: -1 });
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Create a new property
+app.post('/api/properties', async (req, res) => {
+  try {
+    const property = new Property(req.body);
+    await property.save();
+    res.status(201).json({ success: true, property });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Public: Get all properties
+app.get('/api/properties', async (req, res) => {
+  try {
+    const properties = await Property.find();
+    res.json(properties);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Public: Get a single property by ID
+app.get('/api/properties/:id', async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property) {
+      return res.status(404).json({ error: 'Property not found' });
+    }
+    res.json(property);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Update a property
+app.put('/api/properties/:id', async (req, res) => {
+  try {
+    const property = await Property.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!property) {
+      return res.status(404).json({ error: 'Property not found' });
+    }
+    res.json({ success: true, property });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Admin: Delete a property
+app.delete('/api/properties/:id', async (req, res) => {
+  try {
+    const property = await Property.findByIdAndDelete(req.params.id);
+    if (!property) {
+      return res.status(404).json({ error: 'Property not found' });
+    }
+    res.json({ success: true, message: 'Property deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// --- AUTH ROUTES ---
+// Register Admin (should be used cautiously, e.g., via CLI or a secured one-time endpoint)
+app.post('/api/auth/register', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const user = new User({ email, password: hashedPassword });
+        await user.save();
+        res.status(201).send('User registered');
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Login Admin
+app.post('/api/auth/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid credentials' });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Invalid credentials' });
+        }
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // M-Pesa Callback Endpoint
 app.post('/api/mpesa/callback', async (req, res) => {
