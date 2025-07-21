@@ -255,131 +255,10 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Peace of Mind Section */}
-      <section className="w-full bg-white py-16" data-aos="fade-up">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
-          {/* Left: Heading and horizontal property cards */}
-          <div>
-            <h3 className="text-3xl font-bold mb-2 text-gray-900">Peace of mind guaranteed with every booking</h3>
-            <p className="mb-8 text-gray-600 text-lg">We promise expert-vetted homes, total transparency and exceptional service.</p>
-            <div className="flex space-x-6 overflow-x-auto pb-2">
-              {[
-                {
-                  image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=compress&w=600',
-                  location: 'MOUNT KENYA',
-                  name: 'Alpine View Cabin',
-                },
-                {
-                  image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=compress&w=600',
-                  location: 'DIANI BEACH',
-                  name: 'Oceanfront Treehouse',
-                },
-                {
-                  image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=compress&w=600',
-                  location: 'MAASAI MARA',
-                  name: 'Savannah Panorama Lodge',
-                },
-                {
-                  image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=compress&w=600',
-                  location: 'LAKE NAIVASHA',
-                  name: 'Lakeview Glass House',
-                },
-              ].map((card, i) => (
-                <div key={i} className="min-w-[220px] flex-shrink-0">
-                  <img src={card.image} alt={card.name} className="rounded-xl w-full h-40 object-cover mb-2" />
-                  <div className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1">{card.location}</div>
-                  <div className="text-base font-medium text-gray-900 leading-tight">{card.name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Right: Numbered features and image */}
-          <div className="flex flex-col lg:flex-row items-center gap-8">
-            <div className="flex-1 flex flex-col gap-8">
-              <div className="flex items-start gap-4">
-                <div className="text-5xl font-bold text-orange-300 leading-none">1</div>
-                <div>
-                  <div className="font-bold text-lg mb-1">Expert-Vetted Homes</div>
-                  <div className="text-gray-600 text-base">Our experts have meticulously vetted every available rental, filtering out the thousands that don’t meet our standards - saving you from disappointment.</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="text-5xl font-bold text-orange-300 leading-none">2</div>
-                <div>
-                  <div className="font-bold text-lg mb-1">In-house Care</div>
-                  <div className="text-gray-600 text-base">Efficient and empowered home experts, whose sole task is to make your stay exceptional.</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-4"> 
-                <div className="text-5xl font-bold text-orange-300 leading-none">3</div>
-                <div>
-                  <div className="font-bold text-lg mb-1">Total Reassurance</div>
-                  <div className="text-gray-600 text-base">If you get stranded, we’ll help you find a new stay immidiately. Within 5 days of check-in, it’s up to 50% cheaper.</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1 flex justify-center items-center mt-8 lg:mt-0">
-              <div className="relative w-72 h-80">
-                <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=600" alt="The Plum Promise" className="rounded-xl w-full h-full object-cover" />
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-300 text-gray-900 font-bold px-6 py-3 rounded-full shadow-lg text-lg border-4 border-white">The Safari Airbnbs</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ratings/Testimonial Section */}
-      <section className="w-full bg-orange-400 py-14 flex flex-col items-center text-center" data-aos="fade-up">
-        <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">Rated "EXCELLENT" for a reason.</h2>
-        <p className="text-lg text-black max-w-2xl mx-auto mb-8">
-          <span className="font-semibold">We don’t just list homes—we <span className='underline underline-offset-4'>scrutinise them</span></span>, rejecting thousands that don’t meet our standards. When you book with Safari Airbnbs, you’re guaranteed the best.
-        </p>
-        <div className="flex flex-wrap justify-center gap-8 items-center mt-4">
-          {/* Trustpilot badge */}
-          <div className="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8 mb-2" />
-            <div className="flex items-center mb-1">
-              {/* Real star icons */}
-              {Array.from({ length: 5 }).map((_, i) => (
-                <svg key={i} className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36" /></svg>
-              ))}
-            </div>
-            <div className="text-black text-sm">TrustScore <b>4.6</b> | 3,818 reviews</div>
-          </div>
-          {/* Skift badge */}
-          <img src="https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&w=120&h=120&fit=crop" alt="Skift Winner" className="h-20 w-20 rounded-full border-4 border-green-400 object-cover" />
-          {/* Traveller Awards badges */}
-          <div className="flex gap-4">
-            <div className="flex flex-col items-center">
-              <div className="bg-black text-white rounded-full w-28 h-28 flex flex-col items-center justify-center px-2 text-center">
-                <span className="text-xs mt-1">TRAVELLERS' CHOICE AWARDS 2023</span>
-              </div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="bg-black text-white rounded-full w-28 h-28 flex flex-col items-center justify-center px-2 text-center">
-                <span className="text-xs mt-1">TRAVELLERS' CHOICE AWARDS 2024</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured In Logos */}
-      <section className="w-full bg-white py-6 border-b flex flex-col items-center" data-aos="fade-up">
-        <div className="flex flex-wrap justify-center gap-8 items-center opacity-70">
-          <span className="text-lg font-semibold">As featured in</span>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nytimes_hq.png" alt="NYT" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Forbes_logo.svg" alt="Forbes" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo-Architectural-Digest.png" alt="AD" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Harper%27s_Bazaar_logo.svg" alt="Bazaar" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Travel_%2B_Leisure_logo.svg" alt="Travel+Leisure" className="h-6" />
-        </div>
-      </section>
-
       {/* Book Your Dream Stay Section */}
       <section className="w-full bg-gray-50 py-16" data-aos="fade-up">
         <div className="max-w-6xl mx-auto px-4">
-          <h3 className="text-2xl font-bold mb-8 text-orange-500">Book your dream stay today</h3>
+          <h3 className="text-2xl font-extrabold mb-8 text-orange-500 text-center">Book your dream stay today</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {[
               {
@@ -443,6 +322,127 @@ const Index = () => {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Peace of Mind Section */}
+      <section className="w-full bg-white py-16" data-aos="fade-up">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
+          {/* Left: Heading and horizontal property cards */}
+          <div>
+            <h3 className="text-3xl font-bold mb-2 text-orange-500">Why choose Safari Stays Airbnbs</h3>
+            <p className="mb-8 text-gray-600 text-lg">We promise expert-vetted homes, total transparency and exceptional service.</p>
+            <div className="flex space-x-6 overflow-x-auto pb-2">
+              {[
+                {
+                  image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=compress&w=600',
+                  location: 'MOUNT KENYA',
+                  name: 'Alpine View Cabin',
+                },
+                {
+                  image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=compress&w=600',
+                  location: 'DIANI BEACH',
+                  name: 'Oceanfront Treehouse',
+                },
+                {
+                  image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=compress&w=600',
+                  location: 'MAASAI MARA',
+                  name: 'Savannah Panorama Lodge',
+                },
+                {
+                  image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=compress&w=600',
+                  location: 'LAKE NAIVASHA',
+                  name: 'Lakeview Glass House',
+                },
+              ].map((card, i) => (
+                <div key={i} className="min-w-[220px] flex-shrink-0">
+                  <img src={card.image} alt={card.name} className="rounded-xl w-full h-40 object-cover mb-2" />
+                  <div className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1">{card.location}</div>
+                  <div className="text-base font-medium text-gray-900 leading-tight">{card.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Right: Numbered features and image */}
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="flex-1 flex flex-col gap-8">
+              <div className="flex items-start gap-4">
+                <div className="text-5xl font-bold text-orange-500 leading-none">1</div>
+                <div>
+                  <div className="font-bold text-lg mb-1">Expert-Vetted Homes</div>
+                  <div className="text-gray-600 text-base">Our experts have meticulously vetted every available rental, filtering out the thousands that don’t meet our standards - saving you from disappointment.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="text-5xl font-bold text-orange-500 leading-none">2</div>
+                <div>
+                  <div className="font-bold text-lg mb-1">In-house Care</div>
+                  <div className="text-gray-600 text-base">Efficient and empowered home experts, whose sole task is to make your stay exceptional.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-4"> 
+                <div className="text-5xl font-bold text-orange-500 leading-none">3</div>
+                <div>
+                  <div className="font-bold text-lg mb-1">Total Reassurance</div>
+                  <div className="text-gray-600 text-base">If you get stranded, we’ll help you find a new stay immidiately. Within 5 days of check-in, it’s up to 50% cheaper.</div>
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 flex justify-center items-center mt-8 lg:mt-0">
+              <div className="relative w-72 h-80">
+                <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=600" alt="The Plum Promise" className="rounded-xl w-full h-full object-cover" />
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-300 text-gray-900 font-bold px-6 py-3 rounded-full shadow-lg text-lg border-4 border-white">The Safari Airbnbs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ratings/Testimonial Section */}
+      <section className="w-full bg-orange-400 py-14 flex flex-col items-center text-center" data-aos="fade-up">
+        <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">Rated "EXCELLENT" for a reason.</h2>
+        <p className="text-lg text-black max-w-2xl mx-auto mb-8">
+          <span className="font-semibold">We don’t just list homes—we <span className='underline underline-offset-4'>scrutinise them</span></span>, rejecting thousands that don’t meet our standards. When you book with Safari Airbnbs, you’re guaranteed the best.
+        </p>
+        <div className="flex flex-wrap justify-center gap-8 items-center mt-4">
+          {/* Trustpilot badge */}
+          <div className="flex flex-col items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8 mb-2" />
+            <div className="flex items-center mb-1">
+              {/* Real star icons */}
+              {Array.from({ length: 5 }).map((_, i) => (
+                <svg key={i} className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36" /></svg>
+              ))}
+            </div>
+            <div className="text-black text-sm">TrustScore <b>4.6</b> | 3,818 reviews</div>
+          </div>
+          {/* Skift badge */}
+          <img src="https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&w=120&h=120&fit=crop" alt="Skift Winner" className="h-20 w-20 rounded-full border-4 border-green-400 object-cover" />
+          {/* Traveller Awards badges */}
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <div className="bg-black text-white rounded-full w-28 h-28 flex flex-col items-center justify-center px-2 text-center">
+                <span className="text-xs mt-1">TRAVELLERS' CHOICE AWARDS 2023</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-black text-white rounded-full w-28 h-28 flex flex-col items-center justify-center px-2 text-center">
+                <span className="text-xs mt-1">TRAVELLERS' CHOICE AWARDS 2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured In Logos */}
+      <section className="w-full bg-white py-6 border-b flex flex-col items-center" data-aos="fade-up">
+        <div className="flex flex-wrap justify-center gap-8 items-center opacity-70">
+          <span className="text-lg font-semibold">As featured in</span>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nytimes_hq.png" alt="NYT" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Forbes_logo.svg" alt="Forbes" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo-Architectural-Digest.png" alt="AD" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Harper%27s_Bazaar_logo.svg" alt="Bazaar" className="h-6" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Travel_%2B_Leisure_logo.svg" alt="Travel+Leisure" className="h-6" />
         </div>
       </section>
 
