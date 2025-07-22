@@ -88,6 +88,25 @@ const AdminDashboard = () => {
         setIsEditModalOpen(true);
     };
 
+    const handleImageChange = async (e, setPropertyData) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (data.url) {
+                setPropertyData(prev => ({ ...prev, image: data.url }));
+            }
+        } catch (err) {
+            alert('Image upload failed');
+        }
+    };
+
     const renderPropertyForm = (propertyData, setPropertyData) => (
         <form onSubmit={(e) => handleFormSubmit(e, propertyData?._id)} className="space-y-4">
             {/* All form fields here */}
@@ -102,7 +121,11 @@ const AdminDashboard = () => {
                  <div><Label>Beds</Label><Input type="number" value={propertyData.beds} onChange={(e) => setPropertyData({...propertyData, beds: e.target.value})} required/></div>
                  <div><Label>Baths</Label><Input type="number" value={propertyData.baths} onChange={(e) => setPropertyData({...propertyData, baths: e.target.value})} required/></div>
             </div>
-            <div><Label>Image URL</Label><Input value={propertyData.image} onChange={(e) => setPropertyData({...propertyData, image: e.target.value})} required/></div>
+            <div>
+                <Label>Image</Label>
+                <Input type="file" accept="image/*" onChange={e => handleImageChange(e, setPropertyData)} />
+                {propertyData.image && <img src={propertyData.image} alt="Preview" className="mt-2 h-24 rounded" />}
+            </div>
             <div><Label>Description</Label><Textarea value={propertyData.desc} onChange={(e) => setPropertyData({...propertyData, desc: e.target.value})} required/></div>
             <Button type="submit">{propertyData?._id ? 'Update Property' : 'Add Property'}</Button>
         </form>
