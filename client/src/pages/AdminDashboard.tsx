@@ -90,6 +90,7 @@ const AdminDashboard = () => {
 
     const handleImageChange = async (e, setPropertyData) => {
         const file = e.target.files[0];
+        console.log('Selected file:', file);
         if (!file) return;
         const formData = new FormData();
         formData.append('image', file);
@@ -99,10 +100,12 @@ const AdminDashboard = () => {
                 body: formData
             });
             const data = await res.json();
+            console.log('Upload response:', data);
             if (data.url) {
                 setPropertyData(prev => ({ ...prev, image: data.url }));
             }
         } catch (err) {
+            console.error('Image upload failed:', err);
             alert('Image upload failed');
         }
     };
