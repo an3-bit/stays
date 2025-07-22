@@ -33,6 +33,10 @@ const {
   EMAIL_PASS
 } = process.env;
 
+const PESAPAL_CONSUMER_KEY = process.env.PESAPAL_CONSUMER_KEY;
+const PESAPAL_CONSUMER_SECRET = process.env.PESAPAL_CONSUMER_SECRET;
+const PESAPAL_CALLBACK_URL = process.env.PESAPAL_CALLBACK_URL;
+
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safaristays', {
   useNewUrlParser: true,
@@ -382,6 +386,40 @@ app.post('/api/mpesa/callback', async (req, res) => {
   }
   
   res.status(200).json({ message: 'Callback received successfully' });
+});
+
+// Pesapal payment endpoint
+app.post('/api/payments/pesapal', async (req, res) => {
+  try {
+    const { amount, email, phone, name, description } = req.body;
+    const order = {
+      id: `order-${Date.now()}`,
+      currency: 'KES',
+      amount: amount,
+      description: description || 'Safari Stays Payment',
+      callback_url: PESAPAL_CALLBACK_URL,
+      notification_id: '', // Optional: for IPN
+      billing_address: {
+        email_address: email,
+        phone_number: phone,
+        first_name: name.split(' ')[0],
+        last_name: name.split(' ')[1] || '',
+        country_code: 'KE'
+      }
+    };
+    // Create JWT
+    const token = jwt.sign(order, PESAPAL_CONSUMER_SECRET);
+    // Send to Pesapal
+    const pesapalRes = await axios.post(
+      'https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest',
+      { order: token },
+      { headers: { 'Authorization': `Bearer ${PESAPAL_CONSUMER_KEY}` } }
+    );
+    res.json(pesapalRes.data); // Contains redirect_url
+  } catch (err) {
+    console.error('Pesapal error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Pesapal payment initiation failed', details: err.response?.data || err.message });
+  }
 });
 
 app.get('/', (req, res) => res.send('M-Pesa Backend Running'));

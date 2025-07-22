@@ -134,6 +134,31 @@ const AdminDashboard = () => {
         </form>
     );
 
+    // Pesapal card payment handler
+    const handlePesapalPay = async () => {
+        try {
+            const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/payments/pesapal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: 1000, // Replace with actual amount as needed
+                    email: 'customer@example.com', // Replace with actual customer email
+                    phone: '0712345678', // Replace with actual customer phone
+                    name: 'Customer Name', // Replace with actual customer name
+                    description: 'Booking payment'
+                })
+            });
+            const data = await res.json();
+            if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+            } else {
+                alert('Failed to initiate Pesapal payment');
+            }
+        } catch (err) {
+            alert('Pesapal payment error');
+        }
+    };
+
     const renderPaymentsView = () => {
         // Demo payment transactions
         const allTransactions = [
