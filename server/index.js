@@ -6,8 +6,21 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 
 dotenv.config();
+
+// Cloudinary Configuration
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
+
+// Multer setup for memory storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const app = express();
 app.use(express.json());
@@ -212,9 +225,21 @@ app.get('/api/bookings', async (req, res) => {
 });
 
 // Admin: Create a new property
-app.post('/api/properties', async (req, res) => {
+app.post('/api/properties', upload.single('image'), async (req, res) => {
   try {
-    const property = new Property(req.body);
+    let imageUrl = req.body.image || '';
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({ folder: "properties" }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+        stream.end(req.file.buffer);
+      });
+      imageUrl = result.secure_url;
+    }
+    const propertyData = { ...req.body, image: imageUrl };
+    const property = new Property(propertyData);
     await property.save();
     res.status(201).json({ success: true, property });
   } catch (err) {
@@ -246,9 +271,20 @@ app.get('/api/properties/:id', async (req, res) => {
 });
 
 // Admin: Update a property
-app.put('/api/properties/:id', async (req, res) => {
+app.put('/api/properties/:id', upload.single('image'), async (req, res) => {
   try {
-    const property = await Property.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const updateData = { ...req.body };
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({ folder: "properties" }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+        stream.end(req.file.buffer);
+      });
+      updateData.image = result.secure_url;
+    }
+    const property = await Property.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true });
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }

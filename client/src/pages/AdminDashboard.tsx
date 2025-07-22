@@ -32,6 +32,10 @@ const AdminDashboard = () => {
         title: '', type: '', desc: '', image: '', price: '',
         location: '', guests: '', beds: '', baths: '',
     });
+    const [imageFile, setImageFile] = useState(null); // For new property
+    const [imagePreview, setImagePreview] = useState(''); // For new property
+    const [editImageFile, setEditImageFile] = useState(null); // For edit property
+    const [editImagePreview, setEditImagePreview] = useState(''); // For edit property
 
     useEffect(() => {
         fetchProperties();
@@ -56,17 +60,36 @@ const AdminDashboard = () => {
     // --- Property Management Logic ---
     const handleFormSubmit = async (e, propertyId) => {
         e.preventDefault();
-        const url = propertyId ? `https://safari-stays-kenya-connect.onrender.com/api/properties/${propertyId}` : 'https://safari-stays-kenya-connect.onrender.com/api/properties';
-        const method = propertyId ? 'PUT' : 'POST';
-        const body = propertyId ? selectedProperty : newProperty;
-
+        const isEdit = Boolean(propertyId);
+        const url = isEdit ? `https://safari-stays-kenya-connect.onrender.com/api/properties/${propertyId}` : 'https://safari-stays-kenya-connect.onrender.com/api/properties';
+        const method = isEdit ? 'PUT' : 'POST';
+        let formData;
+        if ((isEdit && editImageFile) || (!isEdit && imageFile)) {
+            formData = new FormData();
+            const data = isEdit ? selectedProperty : newProperty;
+            Object.entries(data).forEach(([key, value]) => {
+                if (key !== 'image') formData.append(key, value);
+            });
+            formData.append('image', isEdit ? editImageFile : imageFile);
+        } else {
+            // No new file selected, send JSON (for edit, keep existing image URL)
+            formData = isEdit ? { ...selectedProperty } : { ...newProperty };
+        }
         try {
-            const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            const res = await fetch(url, {
+                method,
+                headers: formData instanceof FormData ? undefined : { 'Content-Type': 'application/json' },
+                body: formData instanceof FormData ? formData : JSON.stringify(formData),
+            });
             if (res.ok) {
                 toast({ title: 'Success', description: `Property ${propertyId ? 'updated' : 'added'}!` });
                 fetchProperties();
                 setIsEditModalOpen(false);
                 setNewProperty({ title: '', type: '', desc: '', image: '', price: '', location: '', guests: '', beds: '', baths: '' });
+                setImageFile(null);
+                setImagePreview('');
+                setEditImageFile(null);
+                setEditImagePreview('');
             } else { throw new Error('Operation failed'); }
         } catch (err) { toast({ title: 'Error', description: err.message, variant: 'destructive' }); }
     };
@@ -88,25 +111,51 @@ const AdminDashboard = () => {
         setIsEditModalOpen(true);
     };
 
-    const renderPropertyForm = (propertyData, setPropertyData) => (
-        <form onSubmit={(e) => handleFormSubmit(e, propertyData?._id)} className="space-y-4">
-            {/* All form fields here */}
-            <div><Label>Title</Label><Input value={propertyData.title} onChange={(e) => setPropertyData({...propertyData, title: e.target.value})} required/></div>
-            <div className="grid grid-cols-2 gap-4">
-                <div><Label>Type</Label><Input value={propertyData.type} onChange={(e) => setPropertyData({...propertyData, type: e.target.value})} required/></div>
-                <div><Label>Price</Label><Input type="number" value={propertyData.price} onChange={(e) => setPropertyData({...propertyData, price: e.target.value})} required/></div>
-            </div>
-            <div><Label>Location</Label><Input value={propertyData.location} onChange={(e) => setPropertyData({...propertyData, location: e.target.value})} required/></div>
-            <div className="grid grid-cols-3 gap-4">
-                 <div><Label>Guests</Label><Input type="number" value={propertyData.guests} onChange={(e) => setPropertyData({...propertyData, guests: e.target.value})} required/></div>
-                 <div><Label>Beds</Label><Input type="number" value={propertyData.beds} onChange={(e) => setPropertyData({...propertyData, beds: e.target.value})} required/></div>
-                 <div><Label>Baths</Label><Input type="number" value={propertyData.baths} onChange={(e) => setPropertyData({...propertyData, baths: e.target.value})} required/></div>
-            </div>
-            <div><Label>Image URL</Label><Input value={propertyData.image} onChange={(e) => setPropertyData({...propertyData, image: e.target.value})} required/></div>
-            <div><Label>Description</Label><Textarea value={propertyData.desc} onChange={(e) => setPropertyData({...propertyData, desc: e.target.value})} required/></div>
-            <Button type="submit">{propertyData?._id ? 'Update Property' : 'Add Property'}</Button>
-        </form>
-    );
+    const handleImageChange = (e, isEdit = false) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (isEdit) {
+            setEditImageFile(file);
+            setEditImagePreview(URL.createObjectURL(file));
+            setSelectedProperty((prev) => ({ ...prev, image: '' }));
+        } else {
+            setImageFile(file);
+            setImagePreview(URL.createObjectURL(file));
+            setNewProperty((prev) => ({ ...prev, image: '' }));
+        }
+    };
+
+    const renderPropertyForm = (propertyData, setPropertyData) => {
+        const isEdit = Boolean(propertyData?._id);
+        const previewUrl = isEdit ? editImagePreview || propertyData.image : imagePreview;
+        return (
+            <form onSubmit={(e) => handleFormSubmit(e, propertyData?._id)} className="space-y-4">
+                {/* All form fields here */}
+                <div><Label>Title</Label><Input value={propertyData.title} onChange={(e) => setPropertyData({...propertyData, title: e.target.value})} required/></div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div><Label>Type</Label><Input value={propertyData.type} onChange={(e) => setPropertyData({...propertyData, type: e.target.value})} required/></div>
+                    <div><Label>Price</Label><Input type="number" value={propertyData.price} onChange={(e) => setPropertyData({...propertyData, price: e.target.value})} required/></div>
+                </div>
+                <div><Label>Location</Label><Input value={propertyData.location} onChange={(e) => setPropertyData({...propertyData, location: e.target.value})} required/></div>
+                <div className="grid grid-cols-3 gap-4">
+                     <div><Label>Guests</Label><Input type="number" value={propertyData.guests} onChange={(e) => setPropertyData({...propertyData, guests: e.target.value})} required/></div>
+                     <div><Label>Beds</Label><Input type="number" value={propertyData.beds} onChange={(e) => setPropertyData({...propertyData, beds: e.target.value})} required/></div>
+                     <div><Label>Baths</Label><Input type="number" value={propertyData.baths} onChange={(e) => setPropertyData({...propertyData, baths: e.target.value})} required/></div>
+                </div>
+                <div>
+                    <Label>Image</Label>
+                    <Input type="file" accept="image/*" onChange={e => handleImageChange(e, isEdit)} />
+                    {previewUrl && (
+                        <div className="mt-2">
+                            <img src={previewUrl} alt="Preview" className="h-32 w-auto rounded border" />
+                        </div>
+                    )}
+                </div>
+                <div><Label>Description</Label><Textarea value={propertyData.desc} onChange={(e) => setPropertyData({...propertyData, desc: e.target.value})} required/></div>
+                <Button type="submit">{propertyData?._id ? 'Update Property' : 'Add Property'}</Button>
+            </form>
+        );
+    };
 
     const renderPaymentsView = () => {
         // Demo payment transactions
