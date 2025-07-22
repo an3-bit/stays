@@ -330,13 +330,15 @@ const upload = multer({ storage });
 // Image upload endpoint (Cloudinary)
 app.post('/api/upload', upload.single('image'), (req, res) => {
   try {
+    console.log('File received:', req.file);
     if (!req.file || !req.file.path) {
+      console.error('No file uploaded or Cloudinary did not return a path.');
       return res.status(400).json({ error: 'No file uploaded' });
     }
-    res.json({ url: req.file.path }); // Cloudinary returns the image URL in file.path
+    res.json({ url: req.file.path });
   } catch (err) {
     console.error('Image upload error:', err);
-    res.status(500).json({ error: 'Image upload failed on server' });
+    res.status(500).json({ error: 'Image upload failed on server', details: err.message });
   }
 });
 
