@@ -4,6 +4,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
+// Simple in-memory cache for prefetched property details
+const propertyPrefetchCache: Record<string, any> = {};
+
+function prefetchPropertyDetails(propertyId: string) {
+  if (propertyPrefetchCache[propertyId]) return;
+  fetch(`/api/properties/${propertyId}`)
+    .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch'))
+    .then(data => {
+      propertyPrefetchCache[propertyId] = data;
+    })
+    .catch(() => {});
+}
+
+export { propertyPrefetchCache }; // Export for use in PropertyDetails
+
 const FeaturedProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +26,7 @@ const FeaturedProperties = () => {
   useEffect(() => {
     const fetchFeaturedProperties = async () => {
       try {
-        const response = await fetch("https://safari-stays-kenya-connect.onrender.com/api/properties?featured=true"); // Assuming an endpoint for featured
+        const response = await fetch("/api/properties?featured=true"); // Assuming an endpoint for featured
         if (!response.ok) {
           throw new Error("Failed to fetch");
         }
@@ -50,8 +65,13 @@ const FeaturedProperties = () => {
                 <p className="text-muted-foreground text-sm mb-4 truncate">{property.desc}</p>
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-primary">KSh {property.price.toLocaleString()}</span>
-                  <Link to={`/property/${property._id}`}>
-                    <Button>View Details</Button>
+                  <Link to={`/property/${property._id}`} state={{ property }}>
+                    <Button
+                      onMouseEnter={() => prefetchPropertyDetails(property._id)}
+                      onFocus={() => prefetchPropertyDetails(property._id)}
+                    >
+                      View Details
+                    </Button>
                   </Link>
                 </div>
               </CardContent>

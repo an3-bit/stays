@@ -16,7 +16,7 @@ const Login = () => {
         e.preventDefault();
         console.log('Attempting to log in...');
         try {
-            const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/auth/login', {
+            const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),

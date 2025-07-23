@@ -8,6 +8,15 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      '/api': {
+        target: 'https://safari-stays-kenya-connect.onrender.com',
+        changeOrigin: true,
+        secure: false,
+        // Optionally rewrite the path if needed:
+        // rewrite: (path) => path.replace(/^\/api/, '/api'),
+      },
+    },
   },
   plugins: [
     react(),

@@ -245,6 +245,46 @@ const Index = () => {
     AOS.init({ duration: 900, once: true });
   }, []);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let intervalId;
+    let isMounted = true;
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch("/api/properties");
+        if (!response.ok) {
+          throw new Error("Failed to fetch properties");
+        }
+        const data = await response.json();
+        const sorted = data.sort((a, b) => {
+          if (a.updatedAt && b.updatedAt) {
+            return new Date(b.updatedAt) - new Date(a.updatedAt);
+          }
+          if (a.createdAt && b.createdAt) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          }
+          return 0;
+        });
+        if (isMounted) setProperties(sorted);
+      } catch (err) {
+        if (isMounted) setError(err.message);
+      } finally {
+        if (isMounted) setLoading(false);
+        // Set up the next poll with a random interval between 10-15 seconds
+        clearInterval(intervalId);
+        const nextInterval = Math.floor(Math.random() * 5000) + 10000; // 10000-15000 ms
+        intervalId = setInterval(fetchProperties, nextInterval);
+      }
+    };
+    fetchProperties();
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
   return (
     <>
       <div className="relative min-h-[70vh] bg-cover bg-center" style={{ backgroundImage: `url('/src/assets/bg.jpg')` }}>
@@ -259,69 +299,32 @@ const Index = () => {
       <section className="w-full bg-gray-50 py-16" data-aos="fade-up">
         <div className="max-w-6xl mx-auto px-4">
           <h3 className="text-2xl font-extrabold mb-8 text-orange-500 text-center">Book your dream stay today</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {[
-              {
-                id: 1,
-                title: 'Diani Beach Villa',
-                type: 'Villa',
-                image: 'https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800',
-                desc: 'A stunning beachfront villa in Diani, Kenya.'
-              },
-              {
-                id: 2,
-                title: 'Maasai Mara Safari Lodge',
-                type: 'Deluxe Suite',
-                image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800',
-                desc: 'Experience the wild in luxury at Maasai Mara.'
-              },
-              {
-                id: 3,
-                title: 'Nairobi City Apartment',
-                type: 'Apartment',
-                image: 'https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800',
-                desc: 'Modern comfort in the heart of Nairobi.'
-              },
-              {
-                id: 4,
-                title: 'Mount Kenya Retreat',
-                type: 'Retreat',
-                image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800',
-                desc: 'A peaceful escape with breathtaking mountain views.'
-              },
-              {
-                id: 5,
-                title: 'Watamu Beach House',
-                type: 'Beach House',
-                image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800',
-                desc: 'Relax in a beautiful home on Watamu’s white sands.'
-              },
-              {
-                id: 6,
-                title: 'Lamu Island Hideaway',
-                type: 'Deluxe Suite',
-                image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800',
-                desc: 'Traditional Swahili charm on Lamu Island.'
-              },
-            ].map((stay, i) => (
-              <Link
-                key={stay.id}
-                to={`/property/${stay.id}`}
-                className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl hover:scale-[1.025] transition-transform transition-shadow duration-200 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-orange-400"
-                tabIndex={0}
-                aria-label={`View details for ${stay.title}`}
-                style={{ textDecoration: 'none' }}
-              >
-                <img src={stay.image} alt={stay.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
-                <div className="p-5">
-                  <span className="inline-block mb-2 px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">{stay.type}</span>
-                  <h4 className="text-xl font-semibold mb-2 text-foreground">{stay.title}</h4>
-                  <p className="text-muted-foreground text-sm mb-4">{stay.desc}</p>
-                  <span className="inline-block mt-2 px-4 py-2 bg-orange-500 text-white rounded-full font-semibold text-sm group-hover:bg-orange-600 transition-colors">View Details</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-8">Loading properties...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-500">Error: {error}</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {properties.slice(0, 6).map((stay) => (
+                <Link
+                  key={stay._id || stay.id}
+                  to={`/property/${stay._id || stay.id}`}
+                  className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-2xl hover:scale-[1.025] transition-transform transition-shadow duration-200 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  tabIndex={0}
+                  aria-label={`View details for ${stay.title}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <img src={stay.image} alt={stay.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="p-5">
+                    <span className="inline-block mb-2 px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">{stay.type}</span>
+                    <h4 className="text-xl font-semibold mb-2 text-foreground">{stay.title}</h4>
+                    <p className="text-muted-foreground text-sm mb-4">{stay.desc}</p>
+                    <span className="inline-block mt-2 px-4 py-2 bg-orange-500 text-white rounded-full font-semibold text-sm group-hover:bg-orange-600 transition-colors">View Details</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
