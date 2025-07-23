@@ -7,11 +7,8 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-<<<<<<< HEAD
 const cloudinary = require('cloudinary').v2;
-=======
-const path = require('path');
->>>>>>> 51f20c6f248ae2adb23e114087f6d04c06bc2c20
+const path = require('path'); // Added missing import for path
 
 dotenv.config();
 
@@ -21,10 +18,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY, 
   api_secret: process.env.CLOUDINARY_API_SECRET 
 });
-
-// Multer setup for memory storage
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 const app = express();
 app.use(express.json());
@@ -229,7 +222,7 @@ app.get('/api/bookings', async (req, res) => {
 });
 
 // Admin: Create a new property
-app.post('/api/properties', upload.single('image'), async (req, res) => {
+app.post('/api/properties', multer({ storage: multer.memoryStorage() }).single('image'), async (req, res) => {
   try {
     let imageUrl = req.body.image || '';
     if (req.file) {
@@ -275,7 +268,7 @@ app.get('/api/properties/:id', async (req, res) => {
 });
 
 // Admin: Update a property
-app.put('/api/properties/:id', upload.single('image'), async (req, res) => {
+app.put('/api/properties/:id', multer({ storage: multer.memoryStorage() }).single('image'), async (req, res) => {
   try {
     const updateData = { ...req.body };
     if (req.file) {
