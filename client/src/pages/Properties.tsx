@@ -235,7 +235,7 @@ const Properties = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
   const [showAll, setShowAll] = useState(false);
-  // Removed selectedProperty and modal logic
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -282,22 +282,21 @@ const Properties = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Featured Properties</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {properties.map((property) => (
-              <Card key={property._id} className="overflow-hidden">
+            {featuredProperties.map((property) => (
+              <Card key={property._id} className="overflow-hidden cursor-pointer" onClick={() => setSelectedProperty(property)}>
                 <img
                   src={property.image}
                   alt={property.title}
                   className="w-full h-56 object-cover"
                 />
+                
                 <CardContent className="p-4">
                   <Badge className="mb-2">{property.type}</Badge>
                   <h3 className="font-semibold text-lg mb-2">{property.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4 truncate">{property.desc}</p>
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-primary">KSh {property.price.toLocaleString()}</span>
-                    <Link to={`/property/${property._id}`} state={{ property }}>
-                      <Button className="bg-orange-500 hover:bg-orange-600 text-white">View Details</Button>
-                    </Link>
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white" onClick={e => {e.stopPropagation(); setSelectedProperty(property);}}>View Details</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -334,7 +333,7 @@ const Properties = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {propertiesToShow.map((property) => (
-            <Card key={property._id} className="overflow-hidden">
+            <Card key={property._id} className="overflow-hidden cursor-pointer" onClick={() => setSelectedProperty(property)}>
               <img
                 src={property.image}
                 alt={property.title}
@@ -346,9 +345,7 @@ const Properties = () => {
                 <p className="text-muted-foreground text-sm mb-4">{property.desc}</p>
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-primary">KSh {property.price.toLocaleString()}</span>
-                  <Link to={`/property/${property._id}`} state={{ property }}>
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">View Details</Button>
-                  </Link>
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white" onClick={e => {e.stopPropagation(); setSelectedProperty(property);}}>View Details</Button>
                 </div>
               </CardContent>
             </Card>
@@ -363,7 +360,7 @@ const Properties = () => {
         )}
       </main>
       <Footer />
-      
+      {selectedProperty && <PropertyModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />}
     </div>
   );
 };

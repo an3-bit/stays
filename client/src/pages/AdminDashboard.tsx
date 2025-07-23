@@ -111,7 +111,7 @@ const AdminDashboard = () => {
         setIsEditModalOpen(true);
     };
 
-    const handleImageChange = (e, isEdit = false) => {
+    const handleImageChange = async (e, isEdit = false) => {
         const file = e.target.files[0];
         console.log('Selected file:', file);
         if (!file) return;
@@ -124,7 +124,11 @@ const AdminDashboard = () => {
             });
             const data = await res.json();
             if (data.url) {
-                setPropertyData(prev => ({ ...prev, image: data.url }));
+                if (isEdit) {
+    setSelectedProperty(prev => ({ ...prev, image: data.url }));
+} else {
+    setNewProperty(prev => ({ ...prev, image: data.url }));
+}
             }
         } catch (err) {
             alert('Image upload failed');
