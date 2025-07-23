@@ -113,49 +113,47 @@ const AdminDashboard = () => {
 
     const handleImageChange = (e, isEdit = false) => {
         const file = e.target.files[0];
+        console.log('Selected file:', file);
         if (!file) return;
-        if (isEdit) {
-            setEditImageFile(file);
-            setEditImagePreview(URL.createObjectURL(file));
-            setSelectedProperty((prev) => ({ ...prev, image: '' }));
-        } else {
-            setImageFile(file);
-            setImagePreview(URL.createObjectURL(file));
-            setNewProperty((prev) => ({ ...prev, image: '' }));
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (data.url) {
+                setPropertyData(prev => ({ ...prev, image: data.url }));
+            }
+        } catch (err) {
+            alert('Image upload failed');
         }
     };
 
-    const renderPropertyForm = (propertyData, setPropertyData) => {
-        const isEdit = Boolean(propertyData?._id);
-        const previewUrl = isEdit ? editImagePreview || propertyData.image : imagePreview;
-        return (
-            <form onSubmit={(e) => handleFormSubmit(e, propertyData?._id)} className="space-y-4">
-                {/* All form fields here */}
-                <div><Label>Title</Label><Input value={propertyData.title} onChange={(e) => setPropertyData({...propertyData, title: e.target.value})} required/></div>
-                <div className="grid grid-cols-2 gap-4">
-                    <div><Label>Type</Label><Input value={propertyData.type} onChange={(e) => setPropertyData({...propertyData, type: e.target.value})} required/></div>
-                    <div><Label>Price</Label><Input type="number" value={propertyData.price} onChange={(e) => setPropertyData({...propertyData, price: e.target.value})} required/></div>
-                </div>
-                <div><Label>Location</Label><Input value={propertyData.location} onChange={(e) => setPropertyData({...propertyData, location: e.target.value})} required/></div>
-                <div className="grid grid-cols-3 gap-4">
-                     <div><Label>Guests</Label><Input type="number" value={propertyData.guests} onChange={(e) => setPropertyData({...propertyData, guests: e.target.value})} required/></div>
-                     <div><Label>Beds</Label><Input type="number" value={propertyData.beds} onChange={(e) => setPropertyData({...propertyData, beds: e.target.value})} required/></div>
-                     <div><Label>Baths</Label><Input type="number" value={propertyData.baths} onChange={(e) => setPropertyData({...propertyData, baths: e.target.value})} required/></div>
-                </div>
-                <div>
-                    <Label>Image</Label>
-                    <Input type="file" accept="image/*" onChange={e => handleImageChange(e, isEdit)} />
-                    {previewUrl && (
-                        <div className="mt-2">
-                            <img src={previewUrl} alt="Preview" className="h-32 w-auto rounded border" />
-                        </div>
-                    )}
-                </div>
-                <div><Label>Description</Label><Textarea value={propertyData.desc} onChange={(e) => setPropertyData({...propertyData, desc: e.target.value})} required/></div>
-                <Button type="submit">{propertyData?._id ? 'Update Property' : 'Add Property'}</Button>
-            </form>
-        );
-    };
+    const renderPropertyForm = (propertyData, setPropertyData) => (
+        <form onSubmit={(e) => handleFormSubmit(e, propertyData?._id)} className="space-y-4">
+            {/* All form fields here */}
+            <div><Label>Title</Label><Input value={propertyData.title} onChange={(e) => setPropertyData({...propertyData, title: e.target.value})} required/></div>
+            <div className="grid grid-cols-2 gap-4">
+                <div><Label>Type</Label><Input value={propertyData.type} onChange={(e) => setPropertyData({...propertyData, type: e.target.value})} required/></div>
+                <div><Label>Price</Label><Input type="number" value={propertyData.price} onChange={(e) => setPropertyData({...propertyData, price: e.target.value})} required/></div>
+            </div>
+            <div><Label>Location</Label><Input value={propertyData.location} onChange={(e) => setPropertyData({...propertyData, location: e.target.value})} required/></div>
+            <div className="grid grid-cols-3 gap-4">
+                 <div><Label>Guests</Label><Input type="number" value={propertyData.guests} onChange={(e) => setPropertyData({...propertyData, guests: e.target.value})} required/></div>
+                 <div><Label>Beds</Label><Input type="number" value={propertyData.beds} onChange={(e) => setPropertyData({...propertyData, beds: e.target.value})} required/></div>
+                 <div><Label>Baths</Label><Input type="number" value={propertyData.baths} onChange={(e) => setPropertyData({...propertyData, baths: e.target.value})} required/></div>
+            </div>
+            <div>
+                <Label>Image</Label>
+                <Input type="file" accept="image/*" onChange={e => handleImageChange(e, setPropertyData)} />
+                {propertyData.image && <img src={propertyData.image} alt="Preview" className="mt-2 h-24 rounded" />}
+            </div>
+            <div><Label>Description</Label><Textarea value={propertyData.desc} onChange={(e) => setPropertyData({...propertyData, desc: e.target.value})} required/></div>
+            <Button type="submit">{propertyData?._id ? 'Update Property' : 'Add Property'}</Button>
+        </form>
+    );
 
     const renderPaymentsView = () => {
         // Demo payment transactions

@@ -71,6 +71,30 @@ const BookingConfirmation = () => {
     }
   };
 
+  const handlePesapalPay = async () => {
+    try {
+      const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/payments/pesapal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: property.price,
+          email: booking.email,
+          phone: booking.phone,
+          name: booking.name,
+          description: `Booking payment for ${property.title}`
+        })
+      });
+      const data = await res.json();
+      if (data.redirect_url) {
+        window.location.href = data.redirect_url;
+      } else {
+        toast({ title: 'Pesapal Error', description: 'Failed to initiate Pesapal payment', variant: 'destructive' });
+      }
+    } catch (err) {
+      toast({ title: 'Pesapal Error', description: 'Pesapal payment error', variant: 'destructive' });
+    }
+  };
+
   if (!booking || !property) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -114,7 +138,13 @@ const BookingConfirmation = () => {
       case "paypal":
         return <div className="text-center p-8 border rounded-lg mt-4"><p>PayPal payment option is coming soon.</p></div>;
       case "card":
-        return <div className="text-center p-8 border rounded-lg mt-4"><p>Credit/Debit Card payment is coming soon.</p></div>;
+        return (
+          <div className="text-center p-8 border rounded-lg mt-4">
+            <Button className="w-full bg-blue-600 hover:bg-blue-700 font-bold" onClick={handlePesapalPay}>
+              Pay with Card (Pesapal)
+            </Button>
+          </div>
+        );
       default:
         return null;
     }
@@ -182,7 +212,7 @@ const BookingConfirmation = () => {
                     variant={selectedPayment === "card" ? "secondary" : "ghost"}
                     className="w-full justify-start gap-3"
                     onClick={() => setSelectedPayment("card")}
-                    disabled
+                    // disabled
                   >
                     <CreditCard className="h-5 w-5"/>
                     Credit/Debit Card

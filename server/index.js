@@ -7,8 +7,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const path = require('path'); // Added missing import for path
+const path = require('path');
 
 dotenv.config();
 
@@ -37,6 +36,10 @@ const {
   EMAIL_USER,
   EMAIL_PASS
 } = process.env;
+
+const PESAPAL_CONSUMER_KEY = process.env.PESAPAL_CONSUMER_KEY;
+const PESAPAL_CONSUMER_SECRET = process.env.PESAPAL_CONSUMER_SECRET;
+const PESAPAL_CALLBACK_URL = process.env.PESAPAL_CALLBACK_URL;
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safaristays', {
@@ -338,29 +341,36 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-// Set up storage for uploaded images
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'uploads'));
+// Cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Multer storage for Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'safaristays-properties',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
 });
 const upload = multer({ storage });
 
-// Serve uploaded images statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Image upload endpoint
+// Image upload endpoint (Cloudinary)
 app.post('/api/upload', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded' });
+  try {
+    console.log('File received:', req.file);
+    if (!req.file || !req.file.path) {
+      console.error('No file uploaded or Cloudinary did not return a path.');
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    res.json({ url: req.file.path });
+  } catch (err) {
+    console.error('Image upload error:', err);
+    res.status(500).json({ error: 'Image upload failed on server', details: err.message });
   }
-  // Return the URL to access the uploaded image
-  const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-  res.json({ url: imageUrl });
 });
 
 // M-Pesa Callback Endpoint
@@ -403,6 +413,40 @@ app.post('/api/mpesa/callback', async (req, res) => {
   }
   
   res.status(200).json({ message: 'Callback received successfully' });
+});
+
+// Pesapal payment endpoint
+app.post('/api/payments/pesapal', async (req, res) => {
+  try {
+    const { amount, email, phone, name, description } = req.body;
+    const order = {
+      id: `order-${Date.now()}`,
+      currency: 'KES',
+      amount: amount,
+      description: description || 'Safari Stays Payment',
+      callback_url: PESAPAL_CALLBACK_URL,
+      notification_id: '', // Optional: for IPN
+      billing_address: {
+        email_address: email,
+        phone_number: phone,
+        first_name: name.split(' ')[0],
+        last_name: name.split(' ')[1] || '',
+        country_code: 'KE'
+      }
+    };
+    // Create JWT
+    const token = jwt.sign(order, PESAPAL_CONSUMER_SECRET);
+    // Send to Pesapal
+    const pesapalRes = await axios.post(
+      'https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest',
+      { order: token },
+      { headers: { 'Authorization': `Bearer ${PESAPAL_CONSUMER_KEY}` } }
+    );
+    res.json(pesapalRes.data); // Contains redirect_url
+  } catch (err) {
+    console.error('Pesapal error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Pesapal payment initiation failed', details: err.response?.data || err.message });
+  }
 });
 
 app.get('/', (req, res) => res.send('M-Pesa Backend Running'));
