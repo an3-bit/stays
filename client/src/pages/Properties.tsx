@@ -12,6 +12,91 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import Footer from "@/components/Footer";
 
+// --- Add Dummy Data Arrays & Conceptual Functions (above Properties component) ---
+const counties = [
+  { id: "nairobi", name: "Nairobi", slug: "nairobi" },
+  { id: "mombasa", name: "Mombasa", slug: "mombasa" },
+  { id: "kisumu", name: "Kisumu", slug: "kisumu" },
+];
+
+const propertiesData = [
+  {
+    id: "p1",
+    countyId: "nairobi",
+    title: "Urban Chic Loft",
+    location: "Westlands",
+    pricePerNight: 9500,
+    rating: 4.9,
+    reviewsCount: 87,
+    amenities: ["WiFi", "Pool", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p2",
+    countyId: "nairobi",
+    title: "Garden View Apartment",
+    location: "Kilimani",
+    pricePerNight: 7200,
+    rating: 4.7,
+    reviewsCount: 54,
+    amenities: ["WiFi", "Kitchen"],
+    images: [
+      "https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p3",
+    countyId: "mombasa",
+    title: "Beachfront Paradise",
+    location: "Nyali",
+    pricePerNight: 18000,
+    rating: 4.8,
+    reviewsCount: 102,
+    amenities: ["Pool", "Beach Access", "Breakfast"],
+    images: [
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: false,
+  },
+  {
+    id: "p4",
+    countyId: "kisumu",
+    title: "Lakeview Retreat",
+    location: "Milimani",
+    pricePerNight: 6500,
+    rating: 4.6,
+    reviewsCount: 33,
+    amenities: ["WiFi", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  // ...add more properties as needed
+];
+
+// Conceptual wishlist toggle
+const handleWishlistToggle = (propertyId: string) => {
+  // Implement wishlist logic here (e.g., update state, call API)
+};
+
+// Conceptual image gallery hook
+const useImageGallery = (images: string[]) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const nextImage = () => setCurrentImageIndex((i) => (i + 1) % images.length);
+  const prevImage = () => setCurrentImageIndex((i) => (i - 1 + images.length) % images.length);
+  return { currentImageIndex, nextImage, prevImage };
+};
+
 const featuredProperties = [
   {
     _id: "f1",
@@ -82,7 +167,6 @@ const PropertyModal = ({ property, onClose }: { property: any, onClose: () => vo
   };
 
   if (!property) return null;
-  // Example data for demo (replace with real data as needed)
   const rating = property.rating || 4.8;
   const reviews = property.reviews || 124;
   const location = property.location || "Kilimani, Nairobi";
@@ -255,7 +339,7 @@ const Properties = () => {
     fetchProperties();
   }, []);
 
-  const handleSort = (order) => {
+  const handleSort = (order: string) => {
     setSortOrder(order);
     const sortedProperties = [...properties].sort((a, b) => {
       if (order === "price-asc") return a.price - b.price;
@@ -277,6 +361,166 @@ const Properties = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
+
+      {/* --- NEW COUNTY LISTINGS SECTIONS --- */}
+      <div className="county-listings-container">
+        {counties.map((county) => {
+          const popularHomes = propertiesData
+            .filter((p) => p.countyId === county.id)
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 4);
+
+          const weekendEscapes = propertiesData
+            .filter((p) => p.countyId === county.id && p.isWeekendAvailable)
+            .slice(0, 4);
+
+          return (
+            <div key={county.id} className="county-section mb-16">
+              {/* Popular Homes Section */}
+              <section className="popular-homes-section mb-8">
+                <h2 className="section-header text-2xl font-bold mb-4">
+                  Discover Your Perfect {county.name} Getaway
+                </h2>
+                <div className="popular-homes-grid scrollable-row no-scrollbar flex gap-6 overflow-x-auto">
+                  {popularHomes[0] && (
+                    <div className="property-card featured-card hoverable min-w-[340px] max-w-[400px] bg-white rounded-xl shadow-lg p-4 mr-4 transition-transform duration-200 hover:scale-105">
+                      <div className="property-image-gallery relative mb-3">
+                        <img
+                          src={popularHomes[0].images[0]}
+                          alt={popularHomes[0].title}
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                        <button className="gallery-nav prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* ← */}</button>
+                        <button className="gallery-nav next absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* → */}</button>
+                      </div>
+                      {popularHomes[0].isGuestFavorite && (
+                        <span className="badge guest-favorite bg-orange-100 text-orange-700 px-2 py-1 rounded font-semibold mb-2 inline-block">
+                          Guest Favorite
+                        </span>
+                      )}
+                      <button
+                        className="wishlist-icon absolute top-4 right-4 text-xl text-gray-400 hover:text-red-500 transition"
+                        onClick={() => handleWishlistToggle(popularHomes[0].id)}
+                        aria-label="Save to wishlist"
+                      >
+                        <i className="fa-regular fa-heart"></i>
+                      </button>
+                      <h3 className="font-bold text-lg mb-1">{popularHomes[0].title}</h3>
+                      <p className="location text-muted-foreground mb-1">{popularHomes[0].location}, {county.name}</p>
+                      <p className="price price-highlight text-orange-600 font-bold text-xl mb-1">
+                        KES {popularHomes[0].pricePerNight} / night
+                      </p>
+                      <p className="rating text-sm text-muted-foreground mb-2">
+                        ⭐ {popularHomes[0].rating} ({popularHomes[0].reviewsCount} reviews)
+                      </p>
+                      <div className="amenities-row flex gap-2 mb-2">
+                        {popularHomes[0].amenities.map((amenity, i) => (
+                          <span key={i} className="amenity-icon bg-gray-100 px-2 py-1 rounded text-xs">{amenity}</span>
+                        ))}
+                      </div>
+                      <a href="#" className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition">
+                        View Details
+                      </a>
+                    </div>
+                  )}
+                  {popularHomes.slice(1).map((property) => (
+                    <div key={property.id} className="property-card hoverable min-w-[260px] max-w-[300px] bg-white rounded-lg shadow p-3 transition-transform duration-200 hover:scale-105">
+                      <div className="property-image-gallery relative mb-2">
+                        <img
+                          src={property.images[0]}
+                          alt={property.title}
+                          className="w-full h-36 object-cover rounded"
+                        />
+                        <button className="gallery-nav prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* ← */}</button>
+                        <button className="gallery-nav next absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* → */}</button>
+                      </div>
+                      {property.isGuestFavorite && (
+                        <span className="badge guest-favorite bg-orange-100 text-orange-700 px-2 py-1 rounded font-semibold mb-2 inline-block">
+                          Guest Favorite
+                        </span>
+                      )}
+                      <button
+                        className="wishlist-icon absolute top-4 right-4 text-xl text-gray-400 hover:text-red-500 transition"
+                        onClick={() => handleWishlistToggle(property.id)}
+                        aria-label="Save to wishlist"
+                      >
+                        <i className="fa-regular fa-heart"></i>
+                      </button>
+                      <h3 className="font-bold text-base mb-1">{property.title}</h3>
+                      <p className="location text-muted-foreground mb-1">{property.location}, {county.name}</p>
+                      <p className="price text-orange-600 font-semibold mb-1">
+                        KES {property.pricePerNight} / night
+                      </p>
+                      <p className="rating text-xs text-muted-foreground mb-2">
+                        ⭐ {property.rating} ({property.reviewsCount} reviews)
+                      </p>
+                      <div className="amenities-row flex gap-1 mb-2">
+                        {property.amenities.map((amenity, i) => (
+                          <span key={i} className="amenity-icon bg-gray-100 px-2 py-1 rounded text-xs">{amenity}</span>
+                        ))}
+                      </div>
+                      <a href="#" className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition">
+                        View Details
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </section>
+              {/* Available This Weekend Section */}
+              <section className="weekend-escapes-section">
+                <h2 className="section-header text-2xl font-bold mb-4">
+                  Quick Escapes in {county.name} this Weekend!
+                </h2>
+                <div className="weekend-escapes-grid scrollable-row no-scrollbar flex gap-6 overflow-x-auto">
+                  {weekendEscapes.map((property) => (
+                    <div key={property.id} className="property-card hoverable min-w-[260px] max-w-[300px] bg-white rounded-lg shadow p-3 transition-transform duration-200 hover:scale-105">
+                      <div className="property-image-gallery relative mb-2">
+                        <img
+                          src={property.images[0]}
+                          alt={property.title}
+                          className="w-full h-36 object-cover rounded"
+                        />
+                        <button className="gallery-nav prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* ← */}</button>
+                        <button className="gallery-nav next absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* → */}</button>
+                      </div>
+                      {property.isGuestFavorite && (
+                        <span className="badge guest-favorite bg-orange-100 text-orange-700 px-2 py-1 rounded font-semibold mb-2 inline-block">
+                          Guest Favorite
+                        </span>
+                      )}
+                      <button
+                        className="wishlist-icon absolute top-4 right-4 text-xl text-gray-400 hover:text-red-500 transition"
+                        onClick={() => handleWishlistToggle(property.id)}
+                        aria-label="Save to wishlist"
+                      >
+                        <i className="fa-regular fa-heart"></i>
+                      </button>
+                      <h3 className="font-bold text-base mb-1">{property.title}</h3>
+                      <p className="location text-muted-foreground mb-1">{property.location}, {county.name}</p>
+                      <p className="price text-orange-600 font-semibold mb-1">
+                        KES {property.pricePerNight} / night
+                      </p>
+                      <p className="rating text-xs text-muted-foreground mb-2">
+                        ⭐ {property.rating} ({property.reviewsCount} reviews)
+                      </p>
+                      <div className="amenities-row flex gap-1 mb-2">
+                        {property.amenities.map((amenity, i) => (
+                          <span key={i} className="amenity-icon bg-gray-100 px-2 py-1 rounded text-xs">{amenity}</span>
+                        ))}
+                      </div>
+                      <a href="#" className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition">
+                        View Details
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+          );
+        })}
+      </div>
+      {/* --- END COUNTY LISTINGS SECTIONS --- */}
+
       {/* Featured Properties Section */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -289,7 +533,6 @@ const Properties = () => {
                   alt={property.title}
                   className="w-full h-56 object-cover"
                 />
-                
                 <CardContent className="p-4">
                   <Badge className="mb-2">{property.type}</Badge>
                   <h3 className="font-semibold text-lg mb-2">{property.title}</h3>
@@ -360,9 +603,9 @@ const Properties = () => {
         )}
       </main>
       <Footer />
-      {selectedProperty && <PropertyModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />}
-    </div>
-  );
+        {selectedProperty && <PropertyModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />}
+      </div>
+        );
 };
 
 export default Properties;
