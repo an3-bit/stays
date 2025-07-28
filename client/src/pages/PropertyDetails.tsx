@@ -2,6 +2,11 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { MapPin, Star, Users, Bath } from "lucide-react";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
@@ -11,6 +16,7 @@ const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const routerLocation = useLocation();
+  const { toast } = useToast();
   let initialProperty = routerLocation.state?.property || null;
   // Try to get from prefetch cache if not in navigation state
   if (!initialProperty && id && propertyPrefetchCache[id]) {
@@ -20,6 +26,43 @@ const PropertyDetails = () => {
   const [loading, setLoading] = useState(!initialProperty);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    checkIn: "",
+    checkOut: "",
+    guests: "",
+    message: ""
+  });
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Confirming your booking...",
+      description: "Please wait a moment.",
+    });
+    try {
+      const bookingResponse = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, propertyId: property?.id || property?._id })
+      });
+      if (!bookingResponse.ok) {
+        throw new Error("Failed to create booking. Please try again.");
+      }
+      const { booking } = await bookingResponse.json();
+      setIsBookingOpen(false);
+      navigate("/booking-submitted", { state: { booking, property } });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: (err as Error).message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    }
+  };
 
   useEffect(() => {
     if (property) return;
@@ -52,19 +95,20 @@ const PropertyDetails = () => {
     );
   }
 
+  // Handle both data structures - static propertiesData and API data
   const {
     title,
     type,
-    price,
-    desc,
+    price = property.pricePerNight, // fallback for static data
+    desc = property.description || "Beautiful property with great amenities",
     location,
-    guests,
-    beds,
-    baths,
-    images = [],
-    amenities = [],
-    rating = 4.8,
-    reviews = 0,
+    guests = property.guests || 4,
+    beds = property.beds || 2,
+    baths = property.baths || 1,
+    images = property.images || [property.image], // handle both single image and array
+    amenities = property.amenities || [],
+    rating = property.rating || 4.8,
+    reviews = property.reviewsCount || property.reviews || 0,
   } = property;
 
   return (
@@ -77,29 +121,78 @@ const PropertyDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Gallery */}
             <div className="relative">
-              <div className="grid grid-cols-2 gap-2 h-80 md:h-[400px]">
-                {images.slice(0, 4).map((img, i) => (
+              {images.length === 1 ? (
+                // Single image layout
+                <div className="h-80 md:h-[400px]">
                   <img
-                    key={i}
-                    src={img}
+                    src={images[0]}
                     alt={title}
                     className="w-full h-full object-cover rounded cursor-pointer"
-                    onClick={() => setSelectedImage(img)}
+                    onClick={() => setSelectedImage(images[0])}
                   />
-                ))}
-              </div>
+                </div>
+              ) : (
+                // Multiple images layout
+                <div className="grid grid-cols-2 gap-2 h-80 md:h-[400px]">
+                  {images.slice(0, 4).map((img, i) => (
+                    <img
+                      key={i}
+                      src={img}
+                      alt={`${title} - Image ${i + 1}`}
+                      className={`w-full h-full object-cover rounded cursor-pointer ${
+                        i === 0 && images.length > 2 ? 'col-span-2' : ''
+                      }`}
+                      onClick={() => setSelectedImage(img)}
+                    />
+                  ))}
+                </div>
+              )}
               {images.length > 4 && (
                 <Button
-                  className="absolute bottom-4 right-4 bg-white/80 text-black"
+                  className="absolute bottom-4 right-4 bg-white/80 text-black hover:bg-white"
                   onClick={() => setSelectedImage(images[0])}
                 >
-                  Show all photos
+                  +{images.length - 4} more photos
                 </Button>
               )}
-              {/* Modal for full image */}
+              {/* Enhanced Modal for full image with navigation */}
               {selectedImage && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80" onClick={() => setSelectedImage(null)}>
-                  <img src={selectedImage} alt="Property" className="max-h-[90vh] max-w-[90vw] rounded shadow-2xl" />
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90" onClick={() => setSelectedImage(null)}>
+                  <div className="relative max-h-[90vh] max-w-[90vw]">
+                    <img src={selectedImage} alt="Property" className="max-h-[90vh] max-w-[90vw] rounded shadow-2xl" />
+                    <button
+                      className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70"
+                      onClick={() => setSelectedImage(null)}
+                    >
+                      ✕
+                    </button>
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 hover:bg-black/70"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const currentIndex = images.indexOf(selectedImage);
+                            const prevIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+                            setSelectedImage(images[prevIndex]);
+                          }}
+                        >
+                          ←
+                        </button>
+                        <button
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 hover:bg-black/70"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const currentIndex = images.indexOf(selectedImage);
+                            const nextIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+                            setSelectedImage(images[nextIndex]);
+                          }}
+                        >
+                          →
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -135,15 +228,147 @@ const PropertyDetails = () => {
               </div>
               {/* Amenities */}
               <div className="mb-6">
-                <h4 className="font-semibold mb-2">Amenities</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {amenities.length > 0 ? amenities.map((am, i) => (
-                    <div key={i} className="flex items-center gap-2 text-muted-foreground">
-                      <span>✔️</span> <span>{am}</span>
-                    </div>
-                  )) : <span className="text-muted-foreground">No amenities listed.</span>}
-                </div>
+                <h4 className="font-semibold mb-3">What this place offers</h4>
+                {amenities.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {amenities.map((amenity, i) => (
+                      <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <span className="text-green-600 text-lg">✓</span>
+                        <span className="text-gray-700">{amenity}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-muted-foreground bg-gray-50 p-4 rounded-lg">
+                    <p>No specific amenities listed for this property.</p>
+                    <p className="text-sm mt-1">Contact the host for more details about available facilities.</p>
+                  </div>
+                )}
               </div>
+              
+              {/* Book Now Button */}
+              <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
+                <DialogTrigger asChild>
+                  <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold py-3 mt-6">
+                    Book Now - KSh {price?.toLocaleString()}/night
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-primary text-xl">Book {title}</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleBookingSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name">Full Name *</Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          required
+                          placeholder="Enter your full name"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email *</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          required
+                          placeholder="your@email.com"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="phone">Phone Number *</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          required
+                          placeholder="+254 700 000 000"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="guests">Number of Guests *</Label>
+                        <Input
+                          id="guests"
+                          type="number"
+                          min="1"
+                          max={guests}
+                          value={formData.guests}
+                          onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+                          required
+                          placeholder={`Max ${guests} guests`}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="checkIn">Check-in Date *</Label>
+                        <Input
+                          id="checkIn"
+                          type="date"
+                          value={formData.checkIn}
+                          onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
+                          required
+                          min={new Date().toISOString().split('T')[0]}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="checkOut">Check-out Date *</Label>
+                        <Input
+                          id="checkOut"
+                          type="date"
+                          value={formData.checkOut}
+                          onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
+                          required
+                          min={formData.checkIn || new Date().toISOString().split('T')[0]}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="message">Special Requests (Optional)</Label>
+                      <Textarea
+                        id="message"
+                        placeholder="Any special requirements, dietary restrictions, or requests..."
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        rows={3}
+                      />
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span>Price per night:</span>
+                        <span className="font-semibold">KSh {price?.toLocaleString()}</span>
+                      </div>
+                      {formData.checkIn && formData.checkOut && (
+                        <>
+                          <div className="flex justify-between items-center mb-2">
+                            <span>Number of nights:</span>
+                            <span className="font-semibold">
+                              {Math.ceil((new Date(formData.checkOut).getTime() - new Date(formData.checkIn).getTime()) / (1000 * 60 * 60 * 24))}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center text-lg font-bold border-t pt-2">
+                            <span>Total:</span>
+                            <span className="text-orange-600">
+                              KSh {(price * Math.ceil((new Date(formData.checkOut).getTime() - new Date(formData.checkIn).getTime()) / (1000 * 60 * 60 * 24))).toLocaleString()}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white text-lg py-3">
+                      Confirm Booking
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </Card>

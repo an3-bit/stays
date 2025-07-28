@@ -20,6 +20,7 @@ const counties = [
 ];
 
 const propertiesData = [
+  
   {
     id: "p1",
     countyId: "nairobi",
@@ -52,6 +53,97 @@ const propertiesData = [
     isWeekendAvailable: true,
   },
   {
+    id: "p5",
+    countyId: "nairobi",
+    title: "Urban Oasis Apartment",
+    location: "Upper Hill",
+    pricePerNight: 8800,
+    rating: 4.6,
+    reviewsCount: 62,
+    amenities: ["WiFi", "Gym", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p6",
+    countyId: "nairobi",
+    title: "Cozy Studio Downtown",
+    location: "CBD",
+    pricePerNight: 5500,
+    rating: 4.5,
+    reviewsCount: 41,
+    amenities: ["WiFi", "Kitchenette"],
+    images: [
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: false,
+  },
+  {
+    id: "p7",
+    countyId: "nairobi",
+    title: "Spacious Family Home",
+    location: "Karen",
+    pricePerNight: 12000,
+    rating: 4.9,
+    reviewsCount: 98,
+    amenities: ["WiFi", "Garden", "Parking", "Pet-friendly"],
+    images: [
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p8",
+    countyId: "nairobi",
+    title: "Modern Penthouse Suite",
+    location: "Lavington",
+    pricePerNight: 15000,
+    rating: 4.8,
+    reviewsCount: 75,
+    amenities: ["WiFi", "Pool", "Gym", "City View"],
+    images: [
+      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p9",
+    countyId: "nairobi",
+    title: "Riverside Apartment",
+    location: "Riverside",
+    pricePerNight: 9000,
+    rating: 4.7,
+    reviewsCount: 50,
+    amenities: ["WiFi", "Balcony", "River View"],
+    images: [
+      "https://images.pexels.com/photos/259751/pexels-photo-259751.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p10",
+    countyId: "nairobi",
+    title: "Serene Garden Villa",
+    location: "Runda",
+    pricePerNight: 16000,
+    rating: 4.9,
+    reviewsCount: 110,
+    amenities: ["WiFi", "Private Garden", "Pool", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/259593/pexels-photo-259593.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  // Mombasa
+  {
     id: "p3",
     countyId: "mombasa",
     title: "Beachfront Paradise",
@@ -67,6 +159,112 @@ const propertiesData = [
     isWeekendAvailable: false,
   },
   {
+    id: "p11",
+    countyId: "mombasa",
+    title: "Oceanfront Villa",
+    location: "Diani",
+    pricePerNight: 25000,
+    rating: 4.9,
+    reviewsCount: 150,
+    amenities: ["Private Beach", "Pool", "Chef Service"],
+    images: [
+      "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p12",
+    countyId: "mombasa",
+    title: "Coastal Breeze Apartment",
+    location: "Nyali",
+    pricePerNight: 12000,
+    rating: 4.7,
+    reviewsCount: 70,
+    amenities: ["WiFi", "Balcony", "Sea View"],
+    images: [
+      "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p13",
+    countyId: "mombasa",
+    title: "Sandy Shores Bungalow",
+    location: "Malindi",
+    pricePerNight: 19000,
+    rating: 4.8,
+    reviewsCount: 90,
+    amenities: ["Beach Access", "Garden", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/246201/pexels-photo-246201.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: false,
+  },
+  {
+    id: "p14",
+    countyId: "mombasa",
+    title: "Palm Tree Paradise",
+    location: "Watamu",
+    pricePerNight: 22000,
+    rating: 4.9,
+    reviewsCount: 110,
+    amenities: ["Pool", "Tropical Garden", "WiFi"],
+    images: [
+      "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p15",
+    countyId: "mombasa",
+    title: "Coral Reef Cottage",
+    location: "Kilifi",
+    pricePerNight: 16000,
+    rating: 4.6,
+    reviewsCount: 60,
+    amenities: ["Snorkeling", "Beach Access", "Kitchen"],
+    images: [
+      "https://images.pexels.com/photos/209296/pexels-photo-209296.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p16",
+    countyId: "mombasa",
+    title: "Sunset Beach House",
+    location: "Ukunda",
+    pricePerNight: 20000,
+    rating: 4.8,
+    reviewsCount: 85,
+    amenities: ["Beachfront", "BBQ Area", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/261189/pexels-photo-261189.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p17",
+    countyId: "mombasa",
+    title: "Azure Sea View Condo",
+    location: "Mtwapa",
+    pricePerNight: 13000,
+    rating: 4.7,
+    reviewsCount: 72,
+    amenities: ["Sea View", "Pool", "Gym"],
+    images: [
+      "https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  // Kisumu
+  {
     id: "p4",
     countyId: "kisumu",
     title: "Lakeview Retreat",
@@ -81,15 +279,117 @@ const propertiesData = [
     isGuestFavorite: false,
     isWeekendAvailable: true,
   },
-  // ...add more properties as needed
+  {
+    id: "p18",
+    countyId: "kisumu",
+    title: "Lakeside Guesthouse",
+    location: "Tom Mboya Estate",
+    pricePerNight: 7000,
+    rating: 4.7,
+    reviewsCount: 45,
+    amenities: ["Lake View", "Garden", "WiFi"],
+    images: [
+      "https://images.pexels.com/photos/246728/pexels-photo-246728.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p19",
+    countyId: "kisumu",
+    title: "Hilltop View Cabin",
+    location: "Riat Hills",
+    pricePerNight: 8500,
+    rating: 4.8,
+    reviewsCount: 55,
+    amenities: ["Panoramic View", "Balcony", "Quiet"],
+    images: [
+      "https://images.pexels.com/photos/1115804/pexels-photo-1115804.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p20",
+    countyId: "kisumu",
+    title: "Green Valley Farmhouse",
+    location: "Muhoroni",
+    pricePerNight: 9500,
+    rating: 4.6,
+    reviewsCount: 38,
+    amenities: ["Farm Stay", "Fresh Produce", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/235986/pexels-photo-235986.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: false,
+  },
+  {
+    id: "p21",
+    countyId: "kisumu",
+    title: "City Center Loft",
+    location: "Oginga Odinga Street",
+    pricePerNight: 6000,
+    rating: 4.5,
+    reviewsCount: 30,
+    amenities: ["Central Location", "Modern Decor", "WiFi"],
+    images: [
+      "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p22",
+    countyId: "kisumu",
+    title: "Quiet Suburban Home",
+    location: "Kondele",
+    pricePerNight: 5800,
+    rating: 4.4,
+    reviewsCount: 25,
+    amenities: ["Quiet Neighborhood", "Garden", "Parking"],
+    images: [
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p23",
+    countyId: "kisumu",
+    title: "Waterfront Apartment",
+    location: "Dunga",
+    pricePerNight: 7800,
+    rating: 4.7,
+    reviewsCount: 40,
+    amenities: ["Waterfront", "Balcony", "Fishing"],
+    images: [
+      "https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: true,
+    isWeekendAvailable: true,
+  },
+  {
+    id: "p24",
+    countyId: "kisumu",
+    title: "Rustic Countryside Retreat",
+    location: "Awasi",
+    pricePerNight: 6800,
+    rating: 4.6,
+    reviewsCount: 35,
+    amenities: ["Countryside", "Peaceful", "Hiking"],
+    images: [
+      "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg?auto=compress&w=800",
+    ],
+    isGuestFavorite: false,
+    isWeekendAvailable: false,
+  },
 ];
 
-// Conceptual wishlist toggle
 const handleWishlistToggle = (propertyId: string) => {
   // Implement wishlist logic here (e.g., update state, call API)
 };
 
-// Conceptual image gallery hook
 const useImageGallery = (images: string[]) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const nextImage = () => setCurrentImageIndex((i) => (i + 1) % images.length);
@@ -97,32 +397,6 @@ const useImageGallery = (images: string[]) => {
   return { currentImageIndex, nextImage, prevImage };
 };
 
-const featuredProperties = [
-  {
-    _id: "f1",
-    title: "Diani Beach Villa",
-    type: "Villa",
-    image: "https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&w=800",
-    desc: "A stunning beachfront villa in Diani, Kenya.",
-    price: 15000
-  },
-  {
-    _id: "f2",
-    title: "Maasai Mara Safari Lodge",
-    type: "Deluxe Suite",
-    image: "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=800",
-    desc: "Experience the wild in luxury at Maasai Mara.",
-    price: 25000
-  },
-  {
-    _id: "f3",
-    title: "Nairobi City Apartment",
-    type: "Apartment",
-    image: "https://images.pexels.com/photos/210604/pexels-photo-210604.jpeg?auto=compress&w=800",
-    desc: "Modern comfort in the heart of Nairobi.",
-    price: 8500
-  }
-];
 
 const PropertyModal = ({ property, onClose }: { property: any, onClose: () => void }) => {
   const { toast } = useToast();
@@ -362,17 +636,17 @@ const Properties = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      {/* --- NEW COUNTY LISTINGS SECTIONS --- */}
+      {/* --- COUNTY LISTINGS SECTIONS (now showing up to 8 per section) --- */}
       <div className="county-listings-container">
         {counties.map((county) => {
           const popularHomes = propertiesData
             .filter((p) => p.countyId === county.id)
             .sort((a, b) => b.rating - a.rating)
-            .slice(0, 4);
+            .slice(0, 8);
 
           const weekendEscapes = propertiesData
             .filter((p) => p.countyId === county.id && p.isWeekendAvailable)
-            .slice(0, 4);
+            .slice(0, 8);
 
           return (
             <div key={county.id} className="county-section mb-16">
@@ -381,88 +655,29 @@ const Properties = () => {
                 <h2 className="section-header text-2xl font-bold mb-4">
                   Discover Your Perfect {county.name} Getaway
                 </h2>
-                <div className="popular-homes-grid scrollable-row no-scrollbar flex gap-6 overflow-x-auto">
-                  {popularHomes[0] && (
-                    <div className="property-card featured-card hoverable min-w-[340px] max-w-[400px] bg-white rounded-xl shadow-lg p-4 mr-4 transition-transform duration-200 hover:scale-105">
-                      <div className="property-image-gallery relative mb-3">
-                        <img
-                          src={popularHomes[0].images[0]}
-                          alt={popularHomes[0].title}
-                          className="w-full h-48 object-cover rounded-lg"
-                        />
-                        <button className="gallery-nav prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* ← */}</button>
-                        <button className="gallery-nav next absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* → */}</button>
-                      </div>
-                      {popularHomes[0].isGuestFavorite && (
-                        <span className="badge guest-favorite bg-orange-100 text-orange-700 px-2 py-1 rounded font-semibold mb-2 inline-block">
-                          Guest Favorite
-                        </span>
-                      )}
-                      <button
-                        className="wishlist-icon absolute top-4 right-4 text-xl text-gray-400 hover:text-red-500 transition"
-                        onClick={() => handleWishlistToggle(popularHomes[0].id)}
-                        aria-label="Save to wishlist"
-                      >
-                        <i className="fa-regular fa-heart"></i>
-                      </button>
-                      <h3 className="font-bold text-lg mb-1">{popularHomes[0].title}</h3>
-                      <p className="location text-muted-foreground mb-1">{popularHomes[0].location}, {county.name}</p>
-                      <p className="price price-highlight text-orange-600 font-bold text-xl mb-1">
-                        KES {popularHomes[0].pricePerNight} / night
-                      </p>
-                      <p className="rating text-sm text-muted-foreground mb-2">
-                        ⭐ {popularHomes[0].rating} ({popularHomes[0].reviewsCount} reviews)
-                      </p>
-                      <div className="amenities-row flex gap-2 mb-2">
-                        {popularHomes[0].amenities.map((amenity, i) => (
-                          <span key={i} className="amenity-icon bg-gray-100 px-2 py-1 rounded text-xs">{amenity}</span>
-                        ))}
-                      </div>
-                      <a href="#" className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition">
-                        View Details
-                      </a>
-                    </div>
-                  )}
-                  {popularHomes.slice(1).map((property) => (
-                    <div key={property.id} className="property-card hoverable min-w-[260px] max-w-[300px] bg-white rounded-lg shadow p-3 transition-transform duration-200 hover:scale-105">
-                      <div className="property-image-gallery relative mb-2">
-                        <img
-                          src={property.images[0]}
-                          alt={property.title}
-                          className="w-full h-36 object-cover rounded"
-                        />
-                        <button className="gallery-nav prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* ← */}</button>
-                        <button className="gallery-nav next absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* → */}</button>
-                      </div>
-                      {property.isGuestFavorite && (
-                        <span className="badge guest-favorite bg-orange-100 text-orange-700 px-2 py-1 rounded font-semibold mb-2 inline-block">
-                          Guest Favorite
-                        </span>
-                      )}
-                      <button
-                        className="wishlist-icon absolute top-4 right-4 text-xl text-gray-400 hover:text-red-500 transition"
-                        onClick={() => handleWishlistToggle(property.id)}
-                        aria-label="Save to wishlist"
-                      >
-                        <i className="fa-regular fa-heart"></i>
-                      </button>
-                      <h3 className="font-bold text-base mb-1">{property.title}</h3>
-                      <p className="location text-muted-foreground mb-1">{property.location}, {county.name}</p>
-                      <p className="price text-orange-600 font-semibold mb-1">
-                        KES {property.pricePerNight} / night
-                      </p>
-                      <p className="rating text-xs text-muted-foreground mb-2">
-                        ⭐ {property.rating} ({property.reviewsCount} reviews)
-                      </p>
-                      <div className="amenities-row flex gap-1 mb-2">
-                        {property.amenities.map((amenity, i) => (
-                          <span key={i} className="amenity-icon bg-gray-100 px-2 py-1 rounded text-xs">{amenity}</span>
-                        ))}
-                      </div>
-                      <a href="#" className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition">
-                        View Details
-                      </a>
-                    </div>
+                <div className="popular-homes-grid grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6">
+                  {popularHomes.map((property) => (
+                    <Card key={property.id} className="overflow-hidden">
+                      <img
+                        src={property.images[0]}
+                        alt={property.title}
+                        className="w-full h-48 object-cover"
+                      />
+                      <CardContent className="p-4">
+                        {property.isGuestFavorite && <Badge className="mb-2">Guest Favorite</Badge>}
+                        <h3 className="font-semibold text-lg mb-2">{property.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-2">{property.location}, {county.name}</p>
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-primary">KES {property.pricePerNight.toLocaleString()} / night</span>
+                          <Link
+                            to={`/properties/${property.id}`}
+                            state={{ property }}
+                          >
+                            <Button className="bg-orange-500 hover:bg-orange-600 text-white">View Details</Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               </section>
@@ -471,47 +686,29 @@ const Properties = () => {
                 <h2 className="section-header text-2xl font-bold mb-4">
                   Quick Escapes in {county.name} this Weekend!
                 </h2>
-                <div className="weekend-escapes-grid scrollable-row no-scrollbar flex gap-6 overflow-x-auto">
+                <div className="weekend-escapes-grid grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6">
                   {weekendEscapes.map((property) => (
-                    <div key={property.id} className="property-card hoverable min-w-[260px] max-w-[300px] bg-white rounded-lg shadow p-3 transition-transform duration-200 hover:scale-105">
-                      <div className="property-image-gallery relative mb-2">
-                        <img
-                          src={property.images[0]}
-                          alt={property.title}
-                          className="w-full h-36 object-cover rounded"
-                        />
-                        <button className="gallery-nav prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* ← */}</button>
-                        <button className="gallery-nav next absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1">{/* → */}</button>
-                      </div>
-                      {property.isGuestFavorite && (
-                        <span className="badge guest-favorite bg-orange-100 text-orange-700 px-2 py-1 rounded font-semibold mb-2 inline-block">
-                          Guest Favorite
-                        </span>
-                      )}
-                      <button
-                        className="wishlist-icon absolute top-4 right-4 text-xl text-gray-400 hover:text-red-500 transition"
-                        onClick={() => handleWishlistToggle(property.id)}
-                        aria-label="Save to wishlist"
-                      >
-                        <i className="fa-regular fa-heart"></i>
-                      </button>
-                      <h3 className="font-bold text-base mb-1">{property.title}</h3>
-                      <p className="location text-muted-foreground mb-1">{property.location}, {county.name}</p>
-                      <p className="price text-orange-600 font-semibold mb-1">
-                        KES {property.pricePerNight} / night
-                      </p>
-                      <p className="rating text-xs text-muted-foreground mb-2">
-                        ⭐ {property.rating} ({property.reviewsCount} reviews)
-                      </p>
-                      <div className="amenities-row flex gap-1 mb-2">
-                        {property.amenities.map((amenity, i) => (
-                          <span key={i} className="amenity-icon bg-gray-100 px-2 py-1 rounded text-xs">{amenity}</span>
-                        ))}
-                      </div>
-                      <a href="#" className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition">
-                        View Details
-                      </a>
-                    </div>
+                    <Card key={property.id} className="overflow-hidden">
+                      <img
+                        src={property.images[0]}
+                        alt={property.title}
+                        className="w-full h-48 object-cover"
+                      />
+                      <CardContent className="p-4">
+                        {property.isGuestFavorite && <Badge className="mb-2">Guest Favorite</Badge>}
+                        <h3 className="font-semibold text-lg mb-2">{property.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-2">{property.location}, {county.name}</p>
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-primary">KES {property.pricePerNight.toLocaleString()} / night</span>
+                          <Link
+                            to={`/properties/${property.id}`}
+                            state={{ property }}
+                          >
+                            <Button className="bg-orange-500 hover:bg-orange-600 text-white">View Details</Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               </section>
@@ -521,32 +718,6 @@ const Properties = () => {
       </div>
       {/* --- END COUNTY LISTINGS SECTIONS --- */}
 
-      {/* Featured Properties Section */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Featured Properties</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {featuredProperties.map((property) => (
-              <Card key={property._id} className="overflow-hidden cursor-pointer" onClick={() => setSelectedProperty(property)}>
-                <img
-                  src={property.image}
-                  alt={property.title}
-                  className="w-full h-56 object-cover"
-                />
-                <CardContent className="p-4">
-                  <Badge className="mb-2">{property.type}</Badge>
-                  <h3 className="font-semibold text-lg mb-2">{property.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4 truncate">{property.desc}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-primary">KSh {property.price.toLocaleString()}</span>
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white" onClick={e => {e.stopPropagation(); setSelectedProperty(property);}}>View Details</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
       {/* All Properties Section */}
       <header className="py-8 bg-card border-b">
         <div className="container mx-auto px-4">
@@ -576,7 +747,7 @@ const Properties = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {propertiesToShow.map((property) => (
-            <Card key={property._id} className="overflow-hidden cursor-pointer" onClick={() => setSelectedProperty(property)}>
+            <Card key={property._id} className="overflow-hidden">
               <img
                 src={property.image}
                 alt={property.title}
@@ -588,7 +759,12 @@ const Properties = () => {
                 <p className="text-muted-foreground text-sm mb-4">{property.desc}</p>
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-primary">KSh {property.price.toLocaleString()}</span>
-                  <Button className="bg-orange-500 hover:bg-orange-600 text-white" onClick={e => {e.stopPropagation(); setSelectedProperty(property);}}>View Details</Button>
+                  <Link
+                    to={`/properties/${property._id}`}
+                    state={{ property }}
+                  >
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">View Details</Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -603,9 +779,9 @@ const Properties = () => {
         )}
       </main>
       <Footer />
-        {selectedProperty && <PropertyModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />}
-      </div>
-        );
+      {selectedProperty && <PropertyModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />}
+    </div>
+  );
 };
 
 export default Properties;
