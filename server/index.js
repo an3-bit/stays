@@ -17,7 +17,12 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: ['https://stays-self.vercel.app', 'https://stays-self.vercel.app/', 'http://localhost:8080'] // Allow multiple origins
+  origin: [
+    'https://stays-self.vercel.app',
+    'https://stays-self.vercel.app/',
+    'http://localhost:8080',
+    'https://tvhstays.com'
+  ] // Allow multiple origins including tvhstays.com
 }));
 
 const {
