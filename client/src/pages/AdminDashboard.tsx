@@ -270,7 +270,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <aside className="w-64 bg-white border-r flex flex-col py-6 px-4">
-        <div className="flex items-center gap-2 mb-8"><Home className="h-7 w-7 text-orange-500" /><span className="font-bold text-lg text-gray-800">Safari Stays Admin</span></div>
+        <div className="flex items-center gap-2 mb-8"><Home className="h-7 w-7 text-orange-500" /><span className="font-bold text-lg text-gray-800">tvhstays Admin</span></div>
         <nav className="flex-1 flex flex-col gap-2">
           <Button variant={activeView === 'dashboard' ? 'secondary' : 'ghost'} onClick={() => setActiveView('dashboard')} className="justify-start gap-3"><Home /> Dashboard</Button>
           <Button variant={activeView === 'bookings' ? 'secondary' : 'ghost'} onClick={() => setActiveView('bookings')} className="justify-start gap-3"><BookOpen /> Bookings</Button>
