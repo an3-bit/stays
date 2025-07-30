@@ -116,6 +116,11 @@ const Navigation = () => {
           <Link to="/contact" className="hidden md:block text-sm font-medium text-foreground hover:text-secondary transition-colors px-3 py-2 rounded-md hover:bg-secondary/10">
             Contact Us
           </Link>
+          <Link to="/become-host" className="hidden md:block">
+            <Button className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-lg transition-colors">
+              Become a Host
+            </Button>
+          </Link>
           <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted">
             <Globe className="h-4 w-4" />
           </Button>
@@ -155,13 +160,21 @@ const Navigation = () => {
                     <Settings className="h-5 w-5" />
                     <span className="font-medium">Services</span>
                   </Link>
-                  <Link 
-                    to="/contact" 
+                  <Link
+                    to="/contact"
                     className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Globe className="h-5 w-5" />
                     <span className="font-medium">Contact Us</span>
+                  </Link>
+                  <Link
+                    to="/become-host"
+                    className="flex items-center gap-3 py-3 px-4 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5" />
+                    <span className="font-medium">Become a Host</span>
                   </Link>
                 </nav>
               </SheetContent>
