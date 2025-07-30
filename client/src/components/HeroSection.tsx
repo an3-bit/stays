@@ -187,7 +187,7 @@ const HeroSection = () => {
             lineHeight: 1.1,
           }}
         >
-          Safari Stays
+          tvhstays
         </span>
       </div>
       <div className="relative z-10 flex flex-col items-center w-full px-4">
@@ -393,7 +393,7 @@ const HeroSection = () => {
           <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
             <SheetContent className="p-0 max-w-full w-full h-full flex flex-col">
               <SheetHeader className="flex-shrink-0">
-                <SheetTitle className="text-center py-4 border-b text-lg font-bold">Safari Stays</SheetTitle>
+                <SheetTitle className="text-center py-4 border-b text-lg font-bold">tvhstays</SheetTitle>
               </SheetHeader>
               {/* Step content */}
               {mobileStep === 'destination' && (

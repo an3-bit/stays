@@ -52,7 +52,7 @@ const team = [
 ];
 
 const milestones = [
-  { year: "2016", event: "Safari Stays Kenya Founded", description: "Started with a vision to showcase Kenya's hospitality" },
+  { year: "2016", event: "tvhstays Kenya Founded", description: "Started with a vision to showcase Kenya's hospitality" },
   { year: "2018", event: "100 Properties Milestone", description: "Reached our first major property listing goal" },
   { year: "2020", event: "Digital Transformation", description: "Launched our modern booking platform" },
   { year: "2022", event: "Award Recognition", description: "Received Kenya Tourism Board Excellence Award" },
@@ -67,7 +67,7 @@ const About = () => {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary via-accent to-secondary">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold text-white mb-6">About Safari Stays Kenya</h1>
+          <h1 className="text-5xl font-bold text-white mb-6">About tvhstays Kenya</h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
             We're passionate about connecting travelers with authentic Kenyan experiences through 
             carefully curated accommodations that showcase the warmth, beauty, and diversity of our beloved country.
@@ -103,7 +103,7 @@ const About = () => {
             
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="text-lg leading-relaxed mb-6">
-                Safari Stays Kenya was born from a simple observation: Kenya has some of the most incredible 
+                tvhstays Kenya was born from a simple observation: Kenya has some of the most incredible 
                 accommodations in the world, but finding and booking them was often complicated and unreliable. 
                 As proud Kenyans who love to travel within our own country, we knew there had to be a better way.
               </p>
@@ -156,7 +156,7 @@ const About = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-foreground mb-4">Meet Our Team</h2>
-            <p className="text-xl text-muted-foreground">The passionate people behind Safari Stays Kenya</p>
+            <p className="text-xl text-muted-foreground">The passionate people behind tvhstays Kenya</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -215,7 +215,7 @@ const About = () => {
             <h2 className="text-4xl font-bold text-foreground mb-4">Join Our Community</h2>
             <p className="text-xl text-muted-foreground mb-8">
               Whether you're a traveler looking for your next adventure or a property owner 
-              wanting to share your space, we'd love to have you as part of the Safari Stays Kenya family.
+              wanting to share your space, we'd love to have you as part of the tvhstays Kenya family.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-primary hover:bg-primary/90">

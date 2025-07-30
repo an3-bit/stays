@@ -333,7 +333,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
           {/* Left: Heading and horizontal property cards */}
           <div>
-            <h3 className="text-3xl font-bold mb-2 text-orange-500">Why choose Safari Stays Airbnbs</h3>
+            <h3 className="text-3xl font-bold mb-2 text-orange-500">Why choose tvhstays Airbnbs</h3>
             <p className="mb-8 text-gray-600 text-lg">We promise expert-vetted homes, total transparency and exceptional service.</p>
             <div className="flex space-x-6 overflow-x-auto pb-2">
               {[
@@ -394,7 +394,7 @@ const Index = () => {
             <div className="flex-1 flex justify-center items-center mt-8 lg:mt-0">
               <div className="relative w-72 h-80">
                 <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&w=600" alt="The Plum Promise" className="rounded-xl w-full h-full object-cover" />
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-300 text-gray-900 font-bold px-6 py-3 rounded-full shadow-lg text-lg border-4 border-white">The Safari Airbnbs</div>
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-300 text-gray-900 font-bold px-6 py-3 rounded-full shadow-lg text-lg border-4 border-white">The tvhstays Airbnbs</div>
               </div>
             </div>
           </div>
@@ -405,7 +405,7 @@ const Index = () => {
       <section className="w-full bg-orange-400 py-14 flex flex-col items-center text-center" data-aos="fade-up">
         <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">Rated "EXCELLENT" for a reason.</h2>
         <p className="text-lg text-black max-w-2xl mx-auto mb-8">
-          <span className="font-semibold">We don’t just list homes—we <span className='underline underline-offset-4'>scrutinise them</span></span>, rejecting thousands that don’t meet our standards. When you book with Safari Airbnbs, you’re guaranteed the best.
+          <span className="font-semibold">We don’t just list homes—we <span className='underline underline-offset-4'>scrutinise them</span></span>, rejecting thousands that don’t meet our standards. When you book with tvhstays Airbnbs, you’re guaranteed the best.
         </p>
         <div className="flex flex-wrap justify-center gap-8 items-center mt-4">
           {/* Trustpilot badge */}

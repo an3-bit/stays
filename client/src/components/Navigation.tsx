@@ -93,7 +93,7 @@ const Navigation = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center group">
           <div className={`${isHome ? "bg-transparent text-orange-300" : "bg-secondary text-secondary-foreground"} px-3 py-1.5 rounded-lg font-bold text-lg tracking-wide shadow group-hover:scale-105 transition-transform`}>
-            Safari Stays
+            tvhstays
           </div>
         </Link>
         {/* Center Navigation */}

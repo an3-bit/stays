@@ -50,7 +50,7 @@ const Footer = () => (
         </div>
       </div>
       <div className="flex flex-col md:flex-row justify-between items-center border-t pt-6 text-xs text-muted-foreground">
-        <div className="mb-2 md:mb-0">© {new Date().getFullYear()} Safari Stays Kenya. All rights reserved.</div>
+        <div className="mb-2 md:mb-0">© {new Date().getFullYear()} tvhstays Kenya. All rights reserved.</div>
         <div className="space-x-4">
           <a href="#" className="hover:underline">Terms</a>
           <a href="#" className="hover:underline">Sitemap</a>
