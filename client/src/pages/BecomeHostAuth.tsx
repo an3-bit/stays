@@ -85,8 +85,8 @@ const BecomeHostAuth = () => {
         description: "Successfully logged in. Redirecting to your dashboard.",
       });
       
-      // Navigate to host dashboard or intro based on user status
-      navigate('/become-host/intro');
+      // Navigate to host dashboard for returning users
+      navigate('/host-dashboard');
     } catch (error) {
       toast({
         title: "Login Failed",
