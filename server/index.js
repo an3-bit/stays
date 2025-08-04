@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
+const cloudinary = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 dotenv.config();
 
