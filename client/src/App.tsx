@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navigation from "./components/Navigation";
+import WhatsAppFloat from "./components/WhatsAppFloat";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -70,6 +71,7 @@ function App() {
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <WhatsAppFloat />
           </main>
         </Router>
       </TooltipProvider>
