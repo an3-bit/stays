@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -261,10 +262,10 @@ const Index = () => {
         const data = await response.json();
         const sorted = data.sort((a, b) => {
           if (a.updatedAt && b.updatedAt) {
-            return new Date(b.updatedAt) - new Date(a.updatedAt);
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
           }
           if (a.createdAt && b.createdAt) {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
           }
           return 0;
         });
@@ -441,11 +442,11 @@ const Index = () => {
       <section className="w-full bg-white py-6 border-b flex flex-col items-center" data-aos="fade-up">
         <div className="flex flex-wrap justify-center gap-8 items-center opacity-70">
           <span className="text-lg font-semibold">As featured in</span>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nytimes_hq.png" alt="NYT" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Forbes_logo.svg" alt="Forbes" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo-Architectural-Digest.png" alt="AD" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Harper%27s_Bazaar_logo.svg" alt="Bazaar" className="h-6" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Travel_%2B_Leisure_logo.svg" alt="Travel+Leisure" className="h-6" />
+          <img src="/logos/citizen_tv.png" alt="Citizen TV" className="h-12 w-auto max-w-[160px] object-contain" />
+          <img src="/logos/ktn_news.png" alt="KTN News" className="h-12 w-auto max-w-[120px] object-contain" />
+          <img src="/logos/ntv_kenya.png" alt="NTV Kenya" className="h-12 w-auto max-w-[120px] object-contain" />
+          <img src="/logos/the_standard.png" alt="The Standard" className="h-12 w-auto max-w-[160px] object-contain" />
+          <img src="/logos/k24_news.png" alt="K24 News" className="h-12 w-auto max-w-[180px] object-contain shadow-lg" />
         </div>
       </section>
 
