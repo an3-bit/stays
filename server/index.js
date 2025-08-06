@@ -264,7 +264,7 @@ app.get('/api/properties', async (req, res) => {
   }
 });
 
-// Public: Get a single property by ID
+// Public: Get a single property by ID,
 app.get('/api/properties/:id', async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
