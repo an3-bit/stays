@@ -53,18 +53,13 @@ const contactMethods = [
 const offices = [
   {
     city: "Nairobi (Head Office)",
-    address: "Westlands, Nairobi",
-    details: "ABC Place, 5th Floor\nWaiyaki Way, Westlands\nNairobi, Kenya",
-    phone: "+254 700 000 001",
+    address: "Roysambu, Nairobi",
+    details:
+      "Jeda Plaza, 4th Floor, J6\nKimiti Road, Opposite, Roysambu RoundAbout\nNairobi, Kenya",
+    phone: "+254 720 353 670",
     hours: "Mon-Fri: 8AM-6PM",
   },
-  {
-    city: "Mombasa",
-    address: "Nyali, Mombasa",
-    details: "Nyali Centre, 2nd Floor\nNyali Road\nMombasa, Kenya",
-    phone: "+254 700 000 002",
-    hours: "Mon-Fri: 8AM-5PM",
-  },
+ 
 ];
 
 const faqs = [
@@ -230,7 +225,7 @@ const Contact = () => {
                     <label className="block text-sm font-medium text-foreground mb-2">
                       Phone Number
                     </label>
-                    <Input placeholder="+254 700 000 000" />
+                    <Input placeholder="+254 700 000 001" />
                   </div>
 
                   <div>
@@ -342,10 +337,12 @@ const Contact = () => {
                       <div>
                         <p className="font-medium">24/7 Emergency Support</p>
                         <p className="text-sm text-muted-foreground">
-                          +254 700 000 999
+                          +254 720 353 670
                         </p>
                       </div>
-                      <Button size="sm">Call</Button>
+                      <a href="tel:+254720353670">
+                        <Button size="sm">Call</Button>
+                      </a>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
                       <div>
@@ -354,13 +351,19 @@ const Contact = () => {
                           Instant responses
                         </p>
                       </div>
-                      <Button
-                        size="sm"
-                        className="bg-green-600 hover:bg-green-700"
+                      <a
+                        href="https://wa.me/254720353670"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <MessageCircle className="h-4 w-4 mr-1" />
-                        Chat
-                      </Button>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          <MessageCircle className="h-4 w-4 mr-1" />
+                          Chat
+                        </Button>
+                      </a>
                     </div>
                   </div>
                 </CardContent>
