@@ -44,7 +44,8 @@ const PropertyDetails = () => {
       description: "Please wait a moment.",
     });
     try {
-      const bookingResponse = await fetch("/api/bookings", {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+      const bookingResponse = await fetch(`${apiBase}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, propertyId: property?.id || property?._id })
@@ -68,7 +69,8 @@ const PropertyDetails = () => {
     if (property) return;
     const fetchProperty = async () => {
       try {
-        const response = await fetch(`/api/properties/${id}`);
+        const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+        const response = await fetch(`${apiBase}/api/properties/${id}`);
         if (!response.ok) throw new Error("Failed to fetch property details");
         const data = await response.json();
         setProperty(data);

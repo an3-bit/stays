@@ -255,7 +255,8 @@ const Index = () => {
     let isMounted = true;
     const fetchProperties = async () => {
       try {
-        const response = await fetch("/api/properties");
+        const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+        const response = await fetch(`${apiBase}/api/properties`);
         if (!response.ok) {
           throw new Error("Failed to fetch properties");
         }

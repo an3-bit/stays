@@ -37,13 +37,14 @@ const BookingConfirmation = () => {
     });
 
     try {
-      const response = await fetch("/api/mpesa/stkpush", {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+      const response = await fetch(`${apiBase}/api/payments/mpesa`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phone: mpesaPhone,
-          amount: property.price,
-          bookingId: booking._id,
+          amount: property?.price,
+          bookingId: booking?._id,
         }),
       });
 
@@ -57,7 +58,7 @@ const BookingConfirmation = () => {
         description: "Please check your phone to complete the M-Pesa payment.",
       });
 
-      navigate("/thank-you", { state: { booking, property, amount: property.price } });
+      navigate("/thank-you", { state: { booking, property, amount: property?.price } });
 
     } catch (err) {
       console.error("M-Pesa payment failed:", err);
@@ -73,15 +74,16 @@ const BookingConfirmation = () => {
 
   const handlePesapalPay = async () => {
     try {
-      const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/payments/pesapal', {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+      const res = await fetch(`${apiBase}/api/payments/pesapal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: property.price,
-          email: booking.email,
-          phone: booking.phone,
-          name: booking.name,
-          description: `Booking payment for ${property.title}`
+          amount: property?.price,
+          email: booking?.email,
+          phone: booking?.phone,
+          name: booking?.name,
+          description: `Booking payment for ${property?.title}`
         })
       });
       const data = await res.json();
@@ -131,7 +133,9 @@ const BookingConfirmation = () => {
               </p>
             </div>
             <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 font-bold" disabled={isProcessing}>
-              {isProcessing ? "Processing..." : `Pay KSh ${property.price.toLocaleString()}`}
+              {isProcessing
+                ? "Processing..."
+                : `Pay KSh ${property?.price ? property.price.toLocaleString() : "N/A"}`}
             </Button>
           </form>
         );
@@ -156,7 +160,7 @@ const BookingConfirmation = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Complete Your Payment</h1>
-            <p className="text-muted-foreground">Choose a payment method to confirm your booking for <strong>{property.title}</strong>.</p>
+            <p className="text-muted-foreground">Choose a payment method to confirm your booking for <strong>{property?.title}</strong>.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -167,20 +171,23 @@ const BookingConfirmation = () => {
               <CardContent className="space-y-4">
                  <div className="flex justify-between">
                     <span className="font-semibold">Property:</span>
-                    <span>{property.title}</span>
+                    <span>{property?.title}</span>
                 </div>
                 <div className="flex justify-between">
                     <span className="font-semibold">Dates:</span>
-                    <span>{new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}</span>
+                    <span>
+                      {booking?.checkIn ? new Date(booking.checkIn).toLocaleDateString() : "N/A"} -{" "}
+                      {booking?.checkOut ? new Date(booking.checkOut).toLocaleDateString() : "N/A"}
+                    </span>
                 </div>
                 <div className="flex justify-between">
                     <span className="font-semibold">Guests:</span>
-                    <span>{booking.guests}</span>
+                    <span>{booking?.guests || "N/A"}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                     <span className="font-semibold">Total Due:</span>
-                    <span>KSh {property.price.toLocaleString()}</span>
+                    <span>KSh {property?.price ? property.price.toLocaleString() : "N/A"}</span>
                 </div>
               </CardContent>
             </Card>
@@ -212,7 +219,6 @@ const BookingConfirmation = () => {
                     variant={selectedPayment === "card" ? "secondary" : "ghost"}
                     className="w-full justify-start gap-3"
                     onClick={() => setSelectedPayment("card")}
-                    // disabled
                   >
                     <CreditCard className="h-5 w-5"/>
                     Credit/Debit Card

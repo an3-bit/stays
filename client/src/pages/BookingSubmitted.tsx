@@ -2,11 +2,32 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
+import { useEffect, useState } from "react";
 
 const BookingSubmitted = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { booking, property } = location.state || {};
+  const { booking, property: passedProperty } = location.state || {};
+  const [property, setProperty] = useState(passedProperty);
+
+  // If property is missing, try to fetch it using booking.propertyId
+  useEffect(() => {
+    const fetchProperty = async () => {
+      if (!property && booking && booking.propertyId) {
+        try {
+          const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+          const res = await fetch(`${apiBase}/api/properties/${booking.propertyId}`);
+          if (res.ok) {
+            const data = await res.json();
+            setProperty(data);
+          }
+        } catch (err) {
+          // Optionally handle error
+        }
+      }
+    };
+    fetchProperty();
+  }, [property, booking]);
 
   if (!booking || !property) {
     return (
@@ -48,20 +69,22 @@ const BookingSubmitted = () => {
           <div className="border-t border-b border-gray-200 dark:border-gray-700 py-6 space-y-4">
             <div className="flex justify-between">
               <span className="text-gray-500 dark:text-gray-400">Booking ID:</span>
-              <span className="font-medium text-gray-800 dark:text-white">{booking._id.slice(-8)}</span>
+              <span className="font-medium text-gray-800 dark:text-white">{booking._id?.slice(-8) || "N/A"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500 dark:text-gray-400">Check-in:</span>
-              <span className="font-medium text-gray-800 dark:text-white">{new Date(booking.checkIn).toLocaleDateString()}</span>
+              <span className="font-medium text-gray-800 dark:text-white">{booking.checkIn ? new Date(booking.checkIn).toLocaleDateString() : "N/A"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500 dark:text-gray-400">Check-out:</span>
-              <span className="font-medium text-gray-800 dark:text-white">{new Date(booking.checkOut).toLocaleDateString()}</span>
+              <span className="font-medium text-gray-800 dark:text-white">{booking.checkOut ? new Date(booking.checkOut).toLocaleDateString() : "N/A"}</span>
             </div>
-             <div className="flex justify-between font-bold text-lg">
-                <span className="text-gray-600 dark:text-gray-300">Total Due:</span>
-                <span className="text-primary">KSh {property.price.toLocaleString()}</span>
-              </div>
+            <div className="flex justify-between font-bold text-lg">
+              <span className="text-gray-600 dark:text-gray-300">Total Due:</span>
+              <span className="text-primary">
+                KSh {property.price ? property.price.toLocaleString() : "N/A"}
+              </span>
+            </div>
           </div>
 
           <div className="mt-8 text-center">
@@ -76,8 +99,8 @@ const BookingSubmitted = () => {
         </div>
       </main>
       <Footer />
-    </div>
-  );
-};
-
-export default BookingSubmitted; 
+      </div>
+    );
+  };
+  
+  export default BookingSubmitted;
