@@ -412,6 +412,7 @@ const Index = () => {
           {/* Trustpilot badge */}
           <div className="flex flex-col items-center">
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8 mb-2" />
+
             <div className="flex items-center mb-1">
               {/* Real star icons */}
               {Array.from({ length: 5 }).map((_, i) => (
