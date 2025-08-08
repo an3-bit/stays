@@ -24,7 +24,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
   origin: '*', // Allow all origins
-  ] // Allow multiple origins including tvhstays.com
+   // Allow multiple origins including tvhstays.com
 }));
 
 const {
