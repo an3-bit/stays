@@ -66,7 +66,7 @@ const PropertyCard = ({
         ))}
       </div>
       <Link
-        to={`/properties/${property.id}`}
+ to={`/properties/${property.id}`}
         className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition"
       >
         View Details
