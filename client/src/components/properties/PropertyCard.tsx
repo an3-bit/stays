@@ -68,6 +68,7 @@ const PropertyCard = ({
       <Link
  to={`/properties/${property.id}`}
         className="view-details-btn text-orange-500 font-semibold underline hover:text-orange-700 transition"
+        state={{ propertyData: property }}
       >
         View Details
       </Link>

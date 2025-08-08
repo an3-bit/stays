@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 interface PropertyDetails {
   // Define the structure of your property data here
@@ -9,11 +9,13 @@ interface PropertyDetails {
 }
 
 const PropertyDetailsPage: React.FC = () => {
-  const { propertyId } = useParams<{ propertyId: string }>();
-  const [property, setProperty] = useState<PropertyDetails | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const [property, setProperty] = useState<PropertyDetails | null>(location.state?.propertyData || null);
+  const [loading, setLoading] = useState(!location.state?.propertyData);
 
   useEffect(() => {
+    if (property) return; // If property data was passed in state, no need to fetch
     const fetchProperty = async () => {
       try {
         const response = await fetch(`/api/properties/${propertyId}`);
@@ -28,7 +30,7 @@ const PropertyDetailsPage: React.FC = () => {
       setLoading(false);
       }
     };
-    fetchProperty();
+    if (!property) fetchProperty();
   }, [propertyId]);
 
   if (loading) {
