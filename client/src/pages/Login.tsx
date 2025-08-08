@@ -16,7 +16,8 @@ const Login = () => {
         e.preventDefault();
         console.log('Attempting to log in...');
         try {
-            const res = await fetch('/api/auth/login', {
+            const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+            const res = await fetch(`${apiBase}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),

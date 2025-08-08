@@ -419,7 +419,8 @@ const PropertyModal = ({ property, onClose }: { property: any, onClose: () => vo
       description: "Please wait a moment.",
     });
     try {
-      const bookingResponse = await fetch("/api/bookings", {
+       const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+      const bookingResponse = await fetch(`${apiBase}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, propertyId: property?._id })
@@ -598,7 +599,8 @@ const Properties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch("/api/properties");
+        const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+      const response = await fetch(`${apiBase}/api/properties`);
         if (!response.ok) {
           throw new Error("Failed to fetch properties");
         }

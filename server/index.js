@@ -23,11 +23,7 @@ cloudinary.config({
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: [
-    'https://stays-self.vercel.app',
-    'https://stays-self.vercel.app/',
-    'http://localhost:8080',
-    'https://tvhstays.com'
+  origin: '*', // Allow all origins
   ] // Allow multiple origins including tvhstays.com
 }));
 
@@ -264,7 +260,7 @@ app.get('/api/properties', async (req, res) => {
   }
 });
 
-// Public: Get a single property by ID
+// Public: Get a single property by ID,
 app.get('/api/properties/:id', async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
