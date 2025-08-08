@@ -9,7 +9,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Destinations from "./pages/Destinations";
 import Properties from "./pages/Properties";
-import PropertyDetails from "./pages/PropertyDetails";
+import PropertyDetailsPage from "./pages/PropertyDetailsPage";
 import BookingConfirmation from "./pages/BookingConfirmation";
 import BookingSubmitted from "./pages/BookingSubmitted";
 import ThankYou from "./pages/ThankYou";
@@ -47,7 +47,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/destinations" element={<Destinations />} />
               <Route path="/properties" element={<Properties />} />
-              <Route path="/properties/:id" element={<PropertyDetails />} />
+              <Route path="/properties/:id" element={<PropertyDetailsPage />} />
               <Route path="/booking-confirmation" element={<BookingConfirmation />} />
               <Route path="/booking-submitted" element={<BookingSubmitted />} />
               <Route path="/thank-you" element={<ThankYou />} />
