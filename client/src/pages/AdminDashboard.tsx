@@ -43,12 +43,19 @@ const AdminDashboard = () => {
     }, []);
 
     const fetchProperties = async () => {
-        const res = await fetch('/api/properties');
+        const res = await fetch('https://safari-stays-kenya-connect.onrender.com/api/properties');
+        if (!res.ok) {
+            toast({ title: 'Error', description: 'Failed to fetch properties', variant: 'destructive' });
+            return;
+        }
+        // Assuming the API returns a JSON array of properties
+  
         setProperties(await res.json());
     };
 
     const fetchBookings = async () => {
-        const res = await fetch('/api/bookings');
+         const apiBase = import.meta.env.VITE_API_BASE_URL || "";
+        const res = await fetch(`${apiBase}/api/properties/${booking.propertyId}`);
         setBookings(await res.json());
     };
 
