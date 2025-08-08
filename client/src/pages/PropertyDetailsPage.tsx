@@ -14,12 +14,21 @@ const PropertyDetailsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In a real application, you would fetch property data here based on propertyId
-    // For now, simulate a loading delay and set some dummy data
-    setTimeout(() => {
-      setProperty({ id: propertyId || 'N/A', name: `Property ${propertyId}` });
+    const fetchProperty = async () => {
+      try {
+        const response = await fetch(`/api/properties/${propertyId}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching property: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setProperty(data);
+      } catch (error) {
+        console.error("Failed to fetch property:", error);
+      } finally {
       setLoading(false);
-    }, 1000);
+      }
+    };
+    fetchProperty();
   }, [propertyId]);
 
   if (loading) {
