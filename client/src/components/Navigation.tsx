@@ -121,9 +121,6 @@ const Navigation = () => {
               Become a Host
             </Button>
           </Link>
-          <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted">
-            <Globe className="h-4 w-4" />
-          </Button>
           <div className="flex items-center space-x-3 py-1.5 px-2">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -136,24 +133,24 @@ const Navigation = () => {
                   <SheetTitle className="text-left">Menu</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col space-y-4 mt-6">
-                  <Link 
-                    to="/" 
+                  <Link
+                    to="/"
                     className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Home className="h-5 w-5" />
                     <span className="font-medium">Stays</span>
                   </Link>
-                  <Link 
-                    to="/properties" 
+                  <Link
+                    to="/properties"
                     className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Star className="h-5 w-5" />
                     <span className="font-medium">Properties</span>
                   </Link>
-                  <Link 
-                    to="/about" 
+                  <Link
+                    to="/about"
                     className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -179,14 +176,6 @@ const Navigation = () => {
                 </nav>
               </SheetContent>
             </Sheet>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 bg-muted"
-              onClick={() => navigate('/login')}
-            >
-              <User className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       </nav>
