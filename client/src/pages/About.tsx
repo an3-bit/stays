@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Shield, Award, Users, MapPin, Clock, Star, CheckCircle } from "lucide-react";
 import Footer from "@/components/Footer";
+import { Link } from "react-router-dom";
 
 const stats = [
   { label: "Properties Listed", value: "500+", icon: MapPin },
@@ -217,12 +218,16 @@ const About = () => {
               wanting to share your space, we'd love to have you as part of the tvhstays Kenya family.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Explore Properties
-              </Button>
-              <Button size="lg" variant="outline">
-                List Your Property
-              </Button>
+              <Link to="/properties">
+                <Button size="lg" className="bg-primary hover:bg-primary/90">
+                  Explore Properties
+                </Button>
+              </Link>
+              <Link to="/become-host">
+                <Button size="lg" variant="outline">
+                  List Your Property
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
