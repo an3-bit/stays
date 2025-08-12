@@ -9,7 +9,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Link } from 'react-router-dom';
 import { Calendar } from "@/components/ui/calendar";
-import { Users, BedDouble, Bath, Home } from "lucide-react";
+import { Users, BedDouble, Bath, Home, Star } from "lucide-react";
 import { format } from "date-fns";
 
 // Modal component for property details
@@ -412,8 +412,10 @@ const Index = () => {
         <div className="flex flex-wrap justify-center gap-8 items-center mt-4">
           {/* Trustpilot badge */}
           <div className="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Trustpilot_logo.png" alt="Trustpilot" className="h-8 mb-2" />
-
+            <div className="flex items-center gap-2 mb-2">
+              <Star className="h-6 w-6 text-green-500 fill-current" />
+              <span className="text-black font-semibold text-lg">Trustpilot</span>
+            </div>
             <div className="flex items-center mb-1">
               {/* Real star icons */}
               {Array.from({ length: 5 }).map((_, i) => (
@@ -422,8 +424,6 @@ const Index = () => {
             </div>
             <div className="text-black text-sm">TrustScore <b>4.6</b> | 3,818 reviews</div>
           </div>
-          {/* Skift badge */}
-          <img src="https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&w=120&h=120&fit=crop" alt="Skift Winner" className="h-20 w-20 rounded-full border-4 border-green-400 object-cover" />
           {/* Traveller Awards badges */}
           <div className="flex gap-4">
             <div className="flex flex-col items-center">
