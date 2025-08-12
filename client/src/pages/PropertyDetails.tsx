@@ -133,6 +133,31 @@ const PropertyDetails = () => {
     return propertyImages;
   }, []);
 
+  // Memoized property data to prevent unnecessary re-renders
+  const propertyData = useMemo(() => {
+    if (!property) return null;
+    
+    return {
+      title: property.title || "Property Title",
+      price: property.price || property.pricePerNight || 0,
+      desc: property.description || property.desc || "Beautiful property with great amenities",
+      location: property.location || "Nairobi, Kenya",
+      guests: property.guests || 4,
+      beds: property.beds || 2,
+      baths: property.baths || 1,
+      amenities: property.amenities || [],
+      rating: property.rating || 4.8,
+      reviews: property.reviewsCount || property.reviews || 0,
+      host: property.host || { name: "Host Name", avatar: "" },
+      priceNum: Number(property.price || property.pricePerNight || 0),
+      coords: property.coordinates
+        ? [property.coordinates.lat, property.coordinates.lng] as LatLngExpression
+        : [-1.286389, 36.817223] as LatLngExpression
+    };
+  }, [property]);
+
+  const images = useMemo(() => normalizeImages(property), [property, normalizeImages]);
+
   const handleBookingSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -203,37 +228,10 @@ const PropertyDetails = () => {
     fetchProperty();
   }, [id, property]);
 
+  // Early returns after all hooks
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error || !property) return <div className="min-h-screen flex items-center justify-center">Property Not Found</div>;
-
-  // Memoized property data to prevent unnecessary re-renders
-  const propertyData = useMemo(() => {
-    if (!property) return null;
-    
-    return {
-      title: property.title || "Property Title",
-      price: property.price || property.pricePerNight || 0,
-      desc: property.description || property.desc || "Beautiful property with great amenities",
-      location: property.location || "Nairobi, Kenya",
-      guests: property.guests || 4,
-      beds: property.beds || 2,
-      baths: property.baths || 1,
-      amenities: property.amenities || [],
-      rating: property.rating || 4.8,
-      reviews: property.reviewsCount || property.reviews || 0,
-      host: property.host || { name: "Host Name", avatar: "" },
-      priceNum: Number(property.price || property.pricePerNight || 0),
-      coords: property.coordinates
-        ? [property.coordinates.lat, property.coordinates.lng] as LatLngExpression
-        : [-1.286389, 36.817223] as LatLngExpression
-    };
-  }, [property]);
-
-  const images = useMemo(() => normalizeImages(property), [property, normalizeImages]);
-
-  if (!propertyData) {
-    return <div className="min-h-screen flex items-center justify-center">Property Not Found</div>;
-  }
+  if (!propertyData) return <div className="min-h-screen flex items-center justify-center">Property Not Found</div>;
 
   const { title, price, desc, location, guests, beds, baths, amenities, rating, reviews, host, priceNum, coords } = propertyData;
 
